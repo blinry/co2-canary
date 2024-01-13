@@ -47,10 +47,15 @@ fn main() -> ! {
     print_2_bytes(&mut i2c, "measurement period", 0x96);
     print_2_bytes(&mut i2c, "number of samples", 0x98);
 
-    if get_byte(&mut i2c, 0x95) == 1 {
-        println!("sensor is in single measurement mode, switching to continuous");
-        i2c.write(SUNRISE_ADDR, &[0x95, 0x00]).unwrap();
+    if get_byte(&mut i2c, 0x95) == 0 {
+        println!("sensor is in continuous measurement mode, switching to single");
+        i2c.write(SUNRISE_ADDR, &[0x95, 0x01]).unwrap();
     }
+
+    // Start a measurement.
+    i2c.write(SUNRISE_ADDR, &[0xC3, 0x01]).unwrap();
+    // Wait for 3.4 seconds.
+    delay.delay_ms(3400u32);
 
     // Read the error from 0x00 and 0x01.
     let mut buf = [0u8; 2];
