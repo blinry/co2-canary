@@ -26,6 +26,9 @@ use embedded_graphics::{
 };
 use epd_waveshare::{epd2in9_v2::*, prelude::*};
 
+use core::fmt::Write;
+use heapless::String;
+
 const SUNRISE_ADDR: u8 = 0x68;
 
 #[entry]
@@ -36,12 +39,14 @@ fn main() -> ! {
     let mut delay = Delay::new(&clocks);
     let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
 
+    let co2 = 1337;
     /*
+    // Enable pin for the CO2 sensor.
+    let mut co2_en = io.pins.gpio25.into_push_pull_output();
+    co2_en.set_high().unwrap();
+
     let sda = io.pins.gpio22;
     let scl = io.pins.gpio20;
-
-    // Datasheet https://rmtplusstoragesenseair.blob.core.windows.net/docs/Dev/publicerat/TDE5531.pdf
-    // says "100 kbit/s".
     let mut i2c = I2C::new(peripherals.I2C0, sda, scl, 100u32.kHz(), &clocks);
 
     delay.delay_ms(35u32);
@@ -69,7 +74,7 @@ fn main() -> ! {
     let mut buf = [0u8; 2];
     i2c.write_read(SUNRISE_ADDR, &[0x00], &mut buf).unwrap();
     let error = u16::from_be_bytes(buf);
-    println!("error in binary (16 bits): {:016b}", error);
+    println!("error (16 bits): {:016b}", error);
 
     // Read the product code from 0x70-0x7F (ASCII).
     let mut buf = [0u8; 16];
@@ -98,12 +103,14 @@ fn main() -> ! {
 
     // Pins for ESP32 Feather v2 + E-Ink Feather Wing
 
+    println!("establishing RTC");
     let mut rtc = Rtc::new(peripherals.RTC_CNTL);
 
     let sck = io.pins.gpio5;
     let mosi = io.pins.gpio19;
     let miso = io.pins.gpio21;
 
+    println!("establishing SPI");
     let mut spi = Spi::new(peripherals.SPI3, 4000u32.kHz(), SpiMode::Mode0, &clocks).with_pins(
         Some(sck),
         Some(mosi),
@@ -111,19 +118,24 @@ fn main() -> ! {
         NO_PIN,
     );
 
+    println!("setting CS high");
     let mut cs = io.pins.gpio15.into_push_pull_output(); // chip select
-    cs.set_high().unwrap();
-    let busy_in = io.pins.gpio26.into_pull_down_input(); // ?
+                                                         //cs.set_high().unwrap();
+    let busy_in = io.pins.gpio26.into_pull_down_input();
     let dc = io.pins.gpio33.into_push_pull_output(); // data/command
     let rst = io.pins.gpio13.into_push_pull_output(); // ?
     let mut delay = Delay::new(&clocks);
 
+    println!("establishing EPD");
     let mut epd = Epd2in9::new(&mut spi, cs, busy_in, dc, rst, &mut delay).unwrap();
 
     // Use display graphics from embedded-graphics
+    println!("establishing display");
     let mut display = Display2in9::default();
 
+    //println!("about to wake up");
     //epd.wake_up(&mut spi, &mut delay).unwrap();
+    //println!("woken up!");
     //epd.clear_frame(&mut spi, &mut delay).unwrap();
     //epd.display_frame(&mut spi, &mut delay).unwrap();
 
@@ -136,9 +148,10 @@ fn main() -> ! {
         .into_styled(PrimitiveStyle::with_stroke(Black, 1))
         .draw(&mut display);
 
-    let text = "ha this does work";
+    let mut text = String::<32>::new();
+    let _ = write!(&mut text, "CO2: {}", co2);
     let style = MonoTextStyle::new(&FONT_10X20, Black);
-    let _ = Text::new(text, Point::new(30, 30), style).draw(&mut display);
+    let _ = Text::new(&text, Point::new(10, 30), style).draw(&mut display);
 
     epd.update_frame(&mut spi, display.buffer(), &mut delay)
         .unwrap();
@@ -149,6 +162,9 @@ fn main() -> ! {
 
     // Set the EPD to sleep
     epd.sleep(&mut spi, &mut delay).unwrap();
+
+    // Set CO2 sensor to sleep.
+    //co2_en.set_low().unwrap();
 
     let mut delay = Delay::new(&clocks);
     let timer = TimerWakeupSource::new(Duration::from_secs(10));

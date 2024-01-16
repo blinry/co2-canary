@@ -330,6 +330,7 @@ dependencies = [
  "esp-backtrace",
  "esp-println",
  "esp32-hal",
+ "heapless",
 ]
 
 [[package]]

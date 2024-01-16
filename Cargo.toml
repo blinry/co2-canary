@@ -11,6 +11,7 @@ esp-backtrace = { version = "0.10.0", features = ["esp32", "panic-handler", "exc
 esp-println = { version = "0.8.0", features = ["esp32"] }
 epd-waveshare = "0.5.0"
 embedded-graphics = "0.7.1"
+heapless = "0.8.0"
 
 [features]
 default = ["esp32-hal/xtal-40mhz"]
