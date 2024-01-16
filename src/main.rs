@@ -39,8 +39,6 @@ fn main() -> ! {
     let mut delay = Delay::new(&clocks);
     let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
 
-    let co2 = 1337;
-    /*
     // Enable pin for the CO2 sensor.
     let mut co2_en = io.pins.gpio25.into_push_pull_output();
     co2_en.set_high().unwrap();
@@ -89,7 +87,6 @@ fn main() -> ! {
     i2c.write_read(SUNRISE_ADDR, &[0x06], &mut buf).unwrap();
     let co2 = u16::from_be_bytes(buf);
     println!("CO2: {}", co2);
-    */
 
     /*
 
@@ -120,10 +117,10 @@ fn main() -> ! {
 
     println!("setting CS high");
     let mut cs = io.pins.gpio15.into_push_pull_output(); // chip select
-                                                         //cs.set_high().unwrap();
-    let busy_in = io.pins.gpio26.into_pull_down_input();
+    cs.set_high().unwrap();
+    let busy_in = io.pins.gpio39.into_pull_down_input();
     let dc = io.pins.gpio33.into_push_pull_output(); // data/command
-    let rst = io.pins.gpio13.into_push_pull_output(); // ?
+    let rst = io.pins.gpio26.into_push_pull_output();
     let mut delay = Delay::new(&clocks);
 
     println!("establishing EPD");
@@ -157,17 +154,17 @@ fn main() -> ! {
         .unwrap();
     epd.display_frame(&mut spi, &mut delay).unwrap();
     println!("drawn!");
-    delay.delay_ms(1000u32);
-    println!("waited!");
+    //delay.delay_ms(1000u32);
+    //println!("waited!");
 
     // Set the EPD to sleep
     epd.sleep(&mut spi, &mut delay).unwrap();
 
     // Set CO2 sensor to sleep.
-    //co2_en.set_low().unwrap();
+    co2_en.set_low().unwrap();
 
     let mut delay = Delay::new(&clocks);
-    let timer = TimerWakeupSource::new(Duration::from_secs(10));
+    let timer = TimerWakeupSource::new(Duration::from_secs(3));
     println!("sleeping!");
     delay.delay_ms(100u32);
     rtc.sleep_deep(&[&timer], &mut delay);
