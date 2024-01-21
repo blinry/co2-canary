@@ -31,6 +31,11 @@ use heapless::String;
 
 const SUNRISE_ADDR: u8 = 0x68;
 
+const HISTORY_LENGTH: usize = 16;
+
+#[link_section = ".rtc.data.rtc_memory"]
+static mut HISTORY: [u16; HISTORY_LENGTH] = [0u16; HISTORY_LENGTH];
+
 #[entry]
 fn main() -> ! {
     let peripherals = Peripherals::take();
@@ -100,6 +105,14 @@ fn main() -> ! {
 
         co2 = u16::from_be_bytes(buf);
         println!("CO2: {}", co2);
+
+        // Shift the history.
+        unsafe {
+            for i in 0..HISTORY_LENGTH - 1 {
+                HISTORY[i] = HISTORY[i + 1];
+            }
+            HISTORY[HISTORY_LENGTH - 1] = co2;
+        }
     }
 
     if true {
@@ -124,10 +137,31 @@ fn main() -> ! {
         let mut epd = Epd2in9::new(&mut spi, cs, busy_in, dc, rst, &mut delay).unwrap();
 
         let mut display = Display2in9::default();
+        display.set_rotation(DisplayRotation::Rotate270);
 
         let _ = Line::new(Point::new(0, 0), Point::new(20, 10))
             .into_styled(PrimitiveStyle::with_stroke(Black, 1))
             .draw(&mut display);
+
+        // Draw a graph of the past values.
+        let width = epd.width();
+        let height = epd.height() / 2;
+        let max_co2 = 4000;
+
+        unsafe {
+            for i in 0..HISTORY_LENGTH - 1 {
+                let x0 = ((i as u32) * width) / (HISTORY_LENGTH as u32);
+                let x1 = (((i + 1) as u32) * width) / (HISTORY_LENGTH as u32);
+                let y0 = height - ((HISTORY[i] as u32) * height) / max_co2;
+                let y1 = height - ((HISTORY[i + 1] as u32) * height) / max_co2;
+                let _ = Line::new(
+                    Point::new(x0 as i32, y0 as i32),
+                    Point::new(x1 as i32, y1 as i32),
+                )
+                .into_styled(PrimitiveStyle::with_stroke(Black, 1))
+                .draw(&mut display);
+            }
+        }
 
         let mut text = String::<32>::new();
         let _ = write!(&mut text, "CO2: {}", co2);
@@ -136,6 +170,9 @@ fn main() -> ! {
 
         epd.update_frame(&mut spi, display.buffer(), &mut delay)
             .unwrap();
+
+        //epd.update_partial_frame(&mut spi, display.buffer(), 0, 0, 50, 30).unwrap();
+
         epd.display_frame(&mut spi, &mut delay).unwrap();
         println!("drawn!");
 
