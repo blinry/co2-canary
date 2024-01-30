@@ -10,9 +10,13 @@ use esp32_hal::{
     i2c::I2C,
     peripherals::Peripherals,
     prelude::*,
-    rtc_cntl::sleep::TimerWakeupSource,
+    rtc_cntl::{
+        get_reset_reason, get_wakeup_cause,
+        sleep::{RtcSleepConfig, TimerWakeupSource},
+        SocResetReason,
+    },
     spi::{master::Spi, SpiMode},
-    Delay, Rtc,
+    Cpu, Delay, Rtc,
 };
 use esp_backtrace as _;
 use esp_println::println;
@@ -31,9 +35,12 @@ use heapless::String;
 
 const SUNRISE_ADDR: u8 = 0x68;
 
-const HISTORY_LENGTH: usize = 16;
+const HISTORY_LENGTH: usize = 148;
 
-#[link_section = ".rtc.data.rtc_memory"]
+#[ram(rtc_fast)]
+static mut COUNTER: u32 = 0;
+
+#[ram(rtc_fast)]
 static mut HISTORY: [u16; HISTORY_LENGTH] = [0u16; HISTORY_LENGTH];
 
 #[entry]
@@ -45,7 +52,22 @@ fn main() -> ! {
     let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
     let mut rtc = Rtc::new(peripherals.RTC_CNTL);
 
+    let reason = get_reset_reason(Cpu::ProCpu).unwrap_or(SocResetReason::ChipPowerOn);
+    println!("reset reason: {:?}", reason);
+    let wake_reason = get_wakeup_cause();
+    println!("wake reason: {:?}", wake_reason);
+    if reason == SocResetReason::ChipPowerOn {
+        unsafe {
+            COUNTER = 0;
+        }
+    }
+
     let mut co2 = 1337;
+
+    println!("Reboots: {}", unsafe { COUNTER });
+    unsafe {
+        COUNTER += 1;
+    }
 
     if true {
         // Enable pin for the CO2 sensor.
@@ -139,34 +161,43 @@ fn main() -> ! {
         let mut display = Display2in9::default();
         display.set_rotation(DisplayRotation::Rotate270);
 
-        let _ = Line::new(Point::new(0, 0), Point::new(20, 10))
-            .into_styled(PrimitiveStyle::with_stroke(Black, 1))
-            .draw(&mut display);
-
         // Draw a graph of the past values.
-        let width = epd.width();
-        let height = epd.height() / 2;
-        let max_co2 = 4000;
+
+        // Swapped because the display is rotated.
+        let width = epd.height() as i32;
+        let height = epd.width() as i32;
 
         unsafe {
+            //for i in 0..HISTORY_LENGTH - 1 {
+            //    HISTORY[i] = (max_co2 * (i as i32) / (HISTORY_LENGTH as i32)) as u16;
+            //}
+
+            let mut max_co2 = 0i32;
+            for i in 0..HISTORY_LENGTH {
+                if HISTORY[i] as i32 > max_co2 {
+                    max_co2 = HISTORY[i] as i32;
+                }
+            }
+
             for i in 0..HISTORY_LENGTH - 1 {
-                let x0 = ((i as u32) * width) / (HISTORY_LENGTH as u32);
-                let x1 = (((i + 1) as u32) * width) / (HISTORY_LENGTH as u32);
-                let y0 = height - ((HISTORY[i] as u32) * height) / max_co2;
-                let y1 = height - ((HISTORY[i + 1] as u32) * height) / max_co2;
-                let _ = Line::new(
-                    Point::new(x0 as i32, y0 as i32),
-                    Point::new(x1 as i32, y1 as i32),
-                )
-                .into_styled(PrimitiveStyle::with_stroke(Black, 1))
-                .draw(&mut display);
+                if (HISTORY[i] == 0) || (HISTORY[i + 1] == 0) {
+                    continue;
+                }
+
+                let x0 = ((i as i32) * width) / ((HISTORY_LENGTH - 1) as i32);
+                let x1 = (((i + 1) as i32) * width) / ((HISTORY_LENGTH - 1) as i32);
+                let y0 = height - ((HISTORY[i] as i32) * height) / max_co2;
+                let y1 = height - ((HISTORY[i + 1] as i32) * height) / max_co2;
+                let _ = Line::new(Point::new(x0, y0), Point::new(x1, y1))
+                    .into_styled(PrimitiveStyle::with_stroke(Black, 1))
+                    .draw(&mut display);
             }
         }
 
         let mut text = String::<32>::new();
         let _ = write!(&mut text, "CO2: {}", co2);
         let style = MonoTextStyle::new(&FONT_10X20, Black);
-        let _ = Text::new(&text, Point::new(10, 30), style).draw(&mut display);
+        let _ = Text::new(&text, Point::new(10, 20), style).draw(&mut display);
 
         epd.update_frame(&mut spi, display.buffer(), &mut delay)
             .unwrap();
@@ -189,7 +220,12 @@ fn main() -> ! {
     let timer = TimerWakeupSource::new(Duration::from_secs(60));
     println!("sleeping!");
     delay.delay_ms(100u32);
-    rtc.sleep_deep(&[&timer], &mut delay);
+
+    let mut cfg = RtcSleepConfig::deep();
+    cfg.set_rtc_fastmem_pd_en(false);
+    //cfg.set_rtc_slowmem_pd_en(false);
+    rtc.sleep(&cfg, &[&timer], &mut delay);
+    panic!("We should never get here after the sleep() call.");
 }
 
 fn get_byte<T>(i2c: &mut I2C<T>, reg: u8) -> u8
