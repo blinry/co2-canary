@@ -13,6 +13,7 @@ epd-waveshare = { git = "https://github.com/caemor/epd-waveshare" }
 embedded-graphics = "0.8.0"
 heapless = "0.8.0"
 embedded-hal-bus = "0.1.0"
+u8g2-fonts = "0.4.0"
 
 [features]
 default = ["esp32-hal/xtal-40mhz"]

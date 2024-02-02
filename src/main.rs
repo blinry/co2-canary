@@ -22,13 +22,16 @@ use esp_backtrace as _;
 use esp_println::println;
 
 use embedded_graphics::{
-    mono_font::{ascii::FONT_10X20, MonoTextStyle},
     prelude::*,
     primitives::{Line, PrimitiveStyle},
-    text::Text,
 };
 use embedded_hal_bus::spi::ExclusiveDevice;
 use epd_waveshare::{epd1in54_v2::*, prelude::*};
+use u8g2_fonts::{
+    fonts,
+    types::{FontColor, HorizontalAlignment, VerticalPosition},
+    FontRenderer,
+};
 
 use core::fmt::Write;
 use heapless::String;
@@ -187,7 +190,7 @@ fn main() -> ! {
                 let y0 = height - ((HISTORY[i] as i32) * height) / max_co2;
                 let y1 = height - ((HISTORY[i + 1] as i32) * height) / max_co2;
                 let _ = Line::new(Point::new(x0, y0), Point::new(x1, y1))
-                    .into_styled(PrimitiveStyle::with_stroke(Color::Black, 1))
+                    .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
                     .draw(&mut display);
             }
         }
@@ -195,9 +198,32 @@ fn main() -> ! {
         epd.set_lut(&mut exclusive_spi, &mut delay, Some(RefreshLut::Full))
             .unwrap();
         let mut text = String::<32>::new();
-        let _ = write!(&mut text, "CO2: {co2}");
-        let style = MonoTextStyle::new(&FONT_10X20, Color::Black);
-        let _ = Text::new(&text, Point::new(10, 20), style).draw(&mut display);
+        let _ = write!(&mut text, "{co2}");
+
+        let font = FontRenderer::new::<fonts::u8g2_font_fub42_tr>();
+        font.render_aligned(
+            text.as_str(),
+            display.bounding_box().center() + Point::new(0, 10),
+            VerticalPosition::Baseline,
+            HorizontalAlignment::Center,
+            FontColor::Transparent(Color::Black),
+            &mut display,
+        )
+        .unwrap();
+
+        let ppm_font = FontRenderer::new::<fonts::u8g2_font_fub25_tr>();
+        let mut ppm_text = String::<32>::new();
+        let _ = write!(&mut ppm_text, "ppm");
+        ppm_font
+            .render_aligned(
+                ppm_text.as_str(),
+                display.bounding_box().center() + Point::new(0, 40),
+                VerticalPosition::Baseline,
+                HorizontalAlignment::Center,
+                FontColor::Transparent(Color::Black),
+                &mut display,
+            )
+            .unwrap();
 
         epd.update_frame(&mut exclusive_spi, display.buffer(), &mut delay)
             .unwrap();
@@ -215,7 +241,7 @@ fn main() -> ! {
 
     // Deep sleep.
     let mut delay = Delay::new(&clocks);
-    let timer = TimerWakeupSource::new(Duration::from_secs(60));
+    let timer = TimerWakeupSource::new(Duration::from_secs(55));
     println!("sleeping!");
     delay.delay_ms(100u32);
 
