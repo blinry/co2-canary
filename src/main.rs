@@ -23,11 +23,11 @@ use esp_println::println;
 
 use embedded_graphics::{
     mono_font::{ascii::FONT_10X20, MonoTextStyle},
-    pixelcolor::BinaryColor::On as Black,
     prelude::*,
     primitives::{Line, PrimitiveStyle},
     text::Text,
 };
+use embedded_hal_bus::spi::ExclusiveDevice;
 use epd_waveshare::{epd2in9_v2::*, prelude::*};
 
 use core::fmt::Write;
@@ -50,7 +50,7 @@ fn main() -> ! {
     let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
     let mut delay = Delay::new(&clocks);
     let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
-    let mut rtc = Rtc::new(peripherals.RTC_CNTL);
+    let mut rtc = Rtc::new(peripherals.LPWR);
 
     let reason = get_reset_reason(Cpu::ProCpu).unwrap_or(SocResetReason::ChipPowerOn);
     println!("reset reason: {:?}", reason);
@@ -149,14 +149,14 @@ fn main() -> ! {
             NO_PIN,
         );
 
-        let mut cs = io.pins.gpio15.into_push_pull_output(); // chip select
-        cs.set_high().unwrap();
+        let cs = io.pins.gpio15.into_push_pull_output(); // chip select
+        let mut exclusive_spi = ExclusiveDevice::new(&mut spi, cs, &mut delay);
         let busy_in = io.pins.gpio39.into_pull_down_input();
         let dc = io.pins.gpio33.into_push_pull_output(); // data/command
         let rst = io.pins.gpio26.into_push_pull_output();
         let mut delay = Delay::new(&clocks);
 
-        let mut epd = Epd2in9::new(&mut spi, cs, busy_in, dc, rst, &mut delay).unwrap();
+        let mut epd = Epd2in9::new(&mut exclusive_spi, busy_in, dc, rst, &mut delay, None).unwrap();
 
         let mut display = Display2in9::default();
         display.set_rotation(DisplayRotation::Rotate270);
@@ -189,25 +189,32 @@ fn main() -> ! {
                 let y0 = height - ((HISTORY[i] as i32) * height) / max_co2;
                 let y1 = height - ((HISTORY[i + 1] as i32) * height) / max_co2;
                 let _ = Line::new(Point::new(x0, y0), Point::new(x1, y1))
-                    .into_styled(PrimitiveStyle::with_stroke(Black, 1))
+                    .into_styled(PrimitiveStyle::with_stroke(Color::Black, 1))
                     .draw(&mut display);
             }
         }
 
         let mut text = String::<32>::new();
         let _ = write!(&mut text, "CO2: {}", co2);
-        let style = MonoTextStyle::new(&FONT_10X20, Black);
+        let style = MonoTextStyle::new(&FONT_10X20, Color::Black);
         let _ = Text::new(&text, Point::new(10, 20), style).draw(&mut display);
 
-        epd.update_frame(&mut spi, display.buffer(), &mut delay)
+        epd.set_background_color(Color::White);
+        epd.clear_frame(&mut exclusive_spi, &mut delay).unwrap();
+        println!("cleared!");
+
+        epd.update_frame(&mut exclusive_spi, display.buffer(), &mut delay)
             .unwrap();
+        println!("updated!");
 
         //epd.update_partial_frame(&mut spi, display.buffer(), 0, 0, 50, 30).unwrap();
 
-        epd.display_frame(&mut spi, &mut delay).unwrap();
+        epd.display_frame(&mut exclusive_spi, &mut delay).unwrap();
         println!("drawn!");
+        delay.delay_ms(2000u32);
+        println!("slept!");
 
-        epd.sleep(&mut spi, &mut delay).unwrap();
+        epd.sleep(&mut exclusive_spi, &mut delay).unwrap();
     }
 
     // Power off the neopixel and I2C bus, for low-power sleep.
@@ -217,7 +224,7 @@ fn main() -> ! {
 
     // Deep sleep.
     let mut delay = Delay::new(&clocks);
-    let timer = TimerWakeupSource::new(Duration::from_secs(60));
+    let timer = TimerWakeupSource::new(Duration::from_secs(3));
     println!("sleeping!");
     delay.delay_ms(100u32);
 
