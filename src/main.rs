@@ -28,7 +28,7 @@ use embedded_graphics::{
     text::Text,
 };
 use embedded_hal_bus::spi::ExclusiveDevice;
-use epd_waveshare::{epd2in9_v2::*, prelude::*};
+use epd_waveshare::{epd1in54_v2::*, prelude::*};
 
 use core::fmt::Write;
 use heapless::String;
@@ -156,10 +156,12 @@ fn main() -> ! {
         let rst = io.pins.gpio26.into_push_pull_output();
         let mut delay = Delay::new(&clocks);
 
-        let mut epd = Epd2in9::new(&mut exclusive_spi, busy_in, dc, rst, &mut delay, None).unwrap();
+        let mut epd =
+            Epd1in54::new(&mut exclusive_spi, busy_in, dc, rst, &mut delay, Some(5)).unwrap();
 
-        let mut display = Display2in9::default();
+        let mut display = Display1in54::default();
         display.set_rotation(DisplayRotation::Rotate270);
+        display.clear(Color::White).unwrap();
 
         // Draw a graph of the past values.
 
@@ -168,10 +170,6 @@ fn main() -> ! {
         let height = epd.width() as i32;
 
         unsafe {
-            //for i in 0..HISTORY_LENGTH - 1 {
-            //    HISTORY[i] = (max_co2 * (i as i32) / (HISTORY_LENGTH as i32)) as u16;
-            //}
-
             let mut max_co2 = 0i32;
             for i in 0..HISTORY_LENGTH {
                 if HISTORY[i] as i32 > max_co2 {
@@ -194,25 +192,18 @@ fn main() -> ! {
             }
         }
 
+        epd.set_lut(&mut exclusive_spi, &mut delay, Some(RefreshLut::Full))
+            .unwrap();
         let mut text = String::<32>::new();
-        let _ = write!(&mut text, "CO2: {}", co2);
+        let _ = write!(&mut text, "CO2: {co2}");
         let style = MonoTextStyle::new(&FONT_10X20, Color::Black);
         let _ = Text::new(&text, Point::new(10, 20), style).draw(&mut display);
 
-        epd.set_background_color(Color::White);
-        epd.clear_frame(&mut exclusive_spi, &mut delay).unwrap();
-        println!("cleared!");
-
         epd.update_frame(&mut exclusive_spi, display.buffer(), &mut delay)
             .unwrap();
-        println!("updated!");
-
-        //epd.update_partial_frame(&mut spi, display.buffer(), 0, 0, 50, 30).unwrap();
 
         epd.display_frame(&mut exclusive_spi, &mut delay).unwrap();
         println!("drawn!");
-        delay.delay_ms(2000u32);
-        println!("slept!");
 
         epd.sleep(&mut exclusive_spi, &mut delay).unwrap();
     }
@@ -224,13 +215,12 @@ fn main() -> ! {
 
     // Deep sleep.
     let mut delay = Delay::new(&clocks);
-    let timer = TimerWakeupSource::new(Duration::from_secs(3));
+    let timer = TimerWakeupSource::new(Duration::from_secs(60));
     println!("sleeping!");
     delay.delay_ms(100u32);
 
     let mut cfg = RtcSleepConfig::deep();
     cfg.set_rtc_fastmem_pd_en(false);
-    //cfg.set_rtc_slowmem_pd_en(false);
     rtc.sleep(&cfg, &[&timer], &mut delay);
     panic!("We should never get here after the sleep() call.");
 }
