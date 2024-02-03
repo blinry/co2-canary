@@ -1,6 +1,10 @@
 #![no_std]
 #![no_main]
 
+mod sunrise;
+
+use sunrise::SunriseSensor;
+
 use core::time::Duration;
 
 use esp32_hal::{
@@ -35,8 +39,6 @@ use u8g2_fonts::{
 
 use core::fmt::Write;
 use heapless::String;
-
-const SUNRISE_ADDR: u8 = 0x68;
 
 const HISTORY_LENGTH: usize = 148;
 
@@ -73,62 +75,23 @@ fn main() -> ! {
     }
 
     if true {
-        // Enable pin for the CO2 sensor.
-        let mut co2_en = io.pins.gpio25.into_push_pull_output();
-        co2_en.set_high().unwrap();
+        let co2_enable = io.pins.gpio25.into_push_pull_output();
 
         let sda = io.pins.gpio22;
         let scl = io.pins.gpio20;
-        let mut i2c = I2C::new(peripherals.I2C0, sda, scl, 100u32.kHz(), &clocks);
+        let i2c = I2C::new(peripherals.I2C0, sda, scl, 100u32.kHz(), &clocks);
 
-        delay.delay_ms(35u32);
+        let mut co2_sensor = SunriseSensor::new(i2c, co2_enable, &mut delay);
+        co2_sensor.init().expect("Could not initialize CO2 sensor");
 
-        // Wake up the sensor. May be NACKed.
-        let _ = i2c.write(SUNRISE_ADDR, &[]);
+        // TODO: Put back the light sleep.
+        //let mut delay = Delay::new(&clocks);
+        //let timer = TimerWakeupSource::new(Duration::from_millis(3400));
+        //println!("light sleep!");
+        //delay.delay_ms(100u32);
+        //rtc.sleep_light(&[&timer], &mut delay);
 
-        delay.delay_ms(5u32);
-
-        print_byte(&mut i2c, "measurement mode", 0x95);
-        print_2_bytes(&mut i2c, "measurement period", 0x96);
-        print_2_bytes(&mut i2c, "number of samples", 0x98);
-
-        if get_byte(&mut i2c, 0x95) == 0 {
-            println!("sensor is in continuous measurement mode, switching to single");
-            i2c.write(SUNRISE_ADDR, &[0x95, 0x01]).unwrap();
-        }
-
-        // Start a measurement.
-        i2c.write(SUNRISE_ADDR, &[0xC3, 0x01]).unwrap();
-
-        // Light sleep for 3.4 seconds.
-        let mut delay = Delay::new(&clocks);
-        let timer = TimerWakeupSource::new(Duration::from_millis(3400));
-        println!("light sleep!");
-        delay.delay_ms(100u32);
-        rtc.sleep_light(&[&timer], &mut delay);
-
-        // Read the error from 0x00 and 0x01.
-        let mut buf = [0u8; 2];
-        i2c.write_read(SUNRISE_ADDR, &[0x00], &mut buf).unwrap();
-        let error = u16::from_be_bytes(buf);
-        println!("error (16 bits): {:016b}", error);
-
-        // Read the product code from 0x70-0x7F (ASCII).
-        let mut buf = [0u8; 16];
-        i2c.write_read(SUNRISE_ADDR, &[0x70], &mut buf).unwrap();
-        // print bytes in a loop
-        for i in 0..16 {
-            println!("{}", buf[i]);
-        }
-
-        // Read the CO2 concentration from 0x06 (MSB) and 0x07 (LSB).
-        let mut buf = [0u8; 2];
-        i2c.write_read(SUNRISE_ADDR, &[0x06], &mut buf).unwrap();
-
-        // Set CO2 sensor to sleep.
-        co2_en.set_low().unwrap();
-
-        co2 = u16::from_be_bytes(buf);
+        co2 = co2_sensor.get_co2().unwrap();
         println!("CO2: {}", co2);
 
         // Shift the history.
@@ -249,30 +212,4 @@ fn main() -> ! {
     cfg.set_rtc_fastmem_pd_en(false);
     rtc.sleep(&cfg, &[&timer], &mut delay);
     panic!("We should never get here after the sleep() call.");
-}
-
-fn get_byte<T>(i2c: &mut I2C<T>, reg: u8) -> u8
-where
-    T: _esp_hal_i2c_Instance,
-{
-    let mut buf = [0u8; 1];
-    i2c.write_read(SUNRISE_ADDR, &[reg], &mut buf).unwrap();
-    buf[0]
-}
-
-fn print_byte<T>(i2c: &mut I2C<T>, name: &str, reg: u8)
-where
-    T: _esp_hal_i2c_Instance,
-{
-    println!("{}: {}", name, get_byte(i2c, reg));
-}
-
-fn print_2_bytes<T>(i2c: &mut I2C<T>, name: &str, reg: u8)
-where
-    T: _esp_hal_i2c_Instance,
-{
-    let mut buf = [0u8; 2];
-    i2c.write_read(SUNRISE_ADDR, &[reg], &mut buf).unwrap();
-    let value = u16::from_be_bytes(buf);
-    println!("{}: {}", name, value);
 }
