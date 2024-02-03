@@ -84,12 +84,13 @@ fn main() -> ! {
         let mut co2_sensor = SunriseSensor::new(i2c, co2_enable, &mut delay);
         co2_sensor.init().expect("Could not initialize CO2 sensor");
 
-        // TODO: Put back the light sleep.
-        //let mut delay = Delay::new(&clocks);
-        //let timer = TimerWakeupSource::new(Duration::from_millis(3400));
-        //println!("light sleep!");
-        //delay.delay_ms(100u32);
-        //rtc.sleep_light(&[&timer], &mut delay);
+        co2_sensor
+            .start_measurement()
+            .expect("Could not start CO2 measurement");
+
+        let mut delay = Delay::new(&clocks);
+        let timer = TimerWakeupSource::new(Duration::from_millis(3400));
+        rtc.sleep_light(&[&timer], &mut delay);
 
         co2 = co2_sensor.get_co2().unwrap();
         println!("CO2: {}", co2);

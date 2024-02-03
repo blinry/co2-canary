@@ -50,14 +50,15 @@ where
         Ok(())
     }
 
-    pub fn get_co2(&mut self) -> Result<u16, I2C::Error> {
+    // TODO: Return a WakeupSource?
+    pub fn start_measurement(&mut self) -> Result<(), I2C::Error> {
         // Start a measurement.
         self.i2c.write(SUNRISE_ADDR, &[0xC3, 0x01])?;
 
-        // Sleep for 3.4 seconds.
-        // TODO: Caller might want to light sleep.
-        self.delay.delay_ms(3400u32);
+        Ok(())
+    }
 
+    pub fn get_co2(&mut self) -> Result<u16, I2C::Error> {
         // Read the error from 0x00 and 0x01.
         let mut buf = [0u8; 2];
         self.i2c.write_read(SUNRISE_ADDR, &[0x00], &mut buf)?;
