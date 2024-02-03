@@ -51,6 +51,7 @@ where
 
         let mut display = Display1in54::default();
         display.set_rotation(DisplayRotation::Rotate270);
+        display.clear(Color::White).unwrap();
 
         Display {
             epd,

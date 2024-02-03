@@ -2,12 +2,15 @@
 #![no_main]
 
 mod display;
+mod history;
 mod sunrise;
 
 use core::time::Duration;
 use display::Display;
+use history::History;
 use sunrise::SunriseSensor;
 
+use embedded_hal_bus::spi::ExclusiveDevice;
 use esp32_hal::{
     clock::ClockControl,
     entry,
@@ -26,15 +29,9 @@ use esp32_hal::{
 use esp_backtrace as _;
 use esp_println::println;
 
-use embedded_hal_bus::spi::ExclusiveDevice;
-
-const HISTORY_LENGTH: usize = 148;
-
 #[ram(rtc_fast)]
-static mut COUNTER: u32 = 0;
-
-#[ram(rtc_fast)]
-static mut HISTORY: [u16; HISTORY_LENGTH] = [0u16; HISTORY_LENGTH];
+//static mut HISTORY: [u16; HISTORY_LENGTH] = [0u16; HISTORY_LENGTH];
+static mut HISTORY: History = History::new();
 
 #[entry]
 fn main() -> ! {
@@ -49,18 +46,8 @@ fn main() -> ! {
     println!("reset reason: {:?}", reason);
     let wake_reason = get_wakeup_cause();
     println!("wake reason: {:?}", wake_reason);
-    if reason == SocResetReason::ChipPowerOn {
-        unsafe {
-            COUNTER = 0;
-        }
-    }
 
     let mut co2 = 1337;
-
-    println!("Reboots: {}", unsafe { COUNTER });
-    unsafe {
-        COUNTER += 1;
-    }
 
     if true {
         let co2_enable = io.pins.gpio25.into_push_pull_output();
@@ -83,12 +70,8 @@ fn main() -> ! {
         co2 = co2_sensor.get_co2().unwrap();
         println!("CO2: {}", co2);
 
-        // Shift the history.
         unsafe {
-            for i in 0..HISTORY_LENGTH - 1 {
-                HISTORY[i] = HISTORY[i + 1];
-            }
-            HISTORY[HISTORY_LENGTH - 1] = co2;
+            HISTORY.add_measurement(co2);
         }
     }
 
@@ -114,17 +97,11 @@ fn main() -> ! {
 
         let mut display = Display::new(exclusive_spi, busy_in, dc, rst, &mut delay);
 
-        // copy history to new array
-        let mut history = [0u16; HISTORY_LENGTH];
         unsafe {
-            (0..HISTORY_LENGTH).for_each(|i| {
-                history[i] = HISTORY[i];
-            });
+            display
+                .draw(co2, HISTORY.data_for_display())
+                .expect("Failed to draw to the display");
         }
-
-        display
-            .draw(co2, &history)
-            .expect("Failed to draw to the display");
     }
 
     // Power off the neopixel and I2C bus, for low-power sleep.
@@ -134,7 +111,7 @@ fn main() -> ! {
 
     // Deep sleep.
     let mut delay = Delay::new(&clocks);
-    let timer = TimerWakeupSource::new(Duration::from_secs(55));
+    let timer = TimerWakeupSource::new(Duration::from_secs(1));
     println!("sleeping!");
     delay.delay_ms(100u32);
 
