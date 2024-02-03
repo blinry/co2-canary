@@ -1,11 +1,12 @@
 #![no_std]
 #![no_main]
 
+mod display;
 mod sunrise;
 
-use sunrise::SunriseSensor;
-
 use core::time::Duration;
+use display::Display;
+use sunrise::SunriseSensor;
 
 use esp32_hal::{
     clock::ClockControl,
@@ -25,20 +26,7 @@ use esp32_hal::{
 use esp_backtrace as _;
 use esp_println::println;
 
-use embedded_graphics::{
-    prelude::*,
-    primitives::{Line, PrimitiveStyle},
-};
 use embedded_hal_bus::spi::ExclusiveDevice;
-use epd_waveshare::{epd1in54_v2::*, prelude::*};
-use u8g2_fonts::{
-    fonts,
-    types::{FontColor, HorizontalAlignment, VerticalPosition},
-    FontRenderer,
-};
-
-use core::fmt::Write;
-use heapless::String;
 
 const HISTORY_LENGTH: usize = 148;
 
@@ -117,85 +105,26 @@ fn main() -> ! {
         );
 
         let cs = io.pins.gpio15.into_push_pull_output(); // chip select
-        let mut exclusive_spi = ExclusiveDevice::new(&mut spi, cs, &mut delay);
         let busy_in = io.pins.gpio39.into_pull_down_input();
         let dc = io.pins.gpio33.into_push_pull_output(); // data/command
         let rst = io.pins.gpio26.into_push_pull_output();
+
+        let exclusive_spi = ExclusiveDevice::new(&mut spi, cs, &mut delay);
         let mut delay = Delay::new(&clocks);
 
-        let mut epd =
-            Epd1in54::new(&mut exclusive_spi, busy_in, dc, rst, &mut delay, Some(5)).unwrap();
+        let mut display = Display::new(exclusive_spi, busy_in, dc, rst, &mut delay);
 
-        let mut display = Display1in54::default();
-        display.set_rotation(DisplayRotation::Rotate270);
-        display.clear(Color::White).unwrap();
-
-        // Draw a graph of the past values.
-
-        // Swapped because the display is rotated.
-        let width = epd.height() as i32;
-        let height = epd.width() as i32;
-
+        // copy history to new array
+        let mut history = [0u16; HISTORY_LENGTH];
         unsafe {
-            let mut max_co2 = 0i32;
-            for i in 0..HISTORY_LENGTH {
-                if HISTORY[i] as i32 > max_co2 {
-                    max_co2 = HISTORY[i] as i32;
-                }
-            }
-
-            for i in 0..HISTORY_LENGTH - 1 {
-                if (HISTORY[i] == 0) || (HISTORY[i + 1] == 0) {
-                    continue;
-                }
-
-                let x0 = ((i as i32) * width) / ((HISTORY_LENGTH - 1) as i32);
-                let x1 = (((i + 1) as i32) * width) / ((HISTORY_LENGTH - 1) as i32);
-                let y0 = height - ((HISTORY[i] as i32) * height) / max_co2;
-                let y1 = height - ((HISTORY[i + 1] as i32) * height) / max_co2;
-                let _ = Line::new(Point::new(x0, y0), Point::new(x1, y1))
-                    .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
-                    .draw(&mut display);
-            }
+            (0..HISTORY_LENGTH).for_each(|i| {
+                history[i] = HISTORY[i];
+            });
         }
 
-        epd.set_lut(&mut exclusive_spi, &mut delay, Some(RefreshLut::Full))
-            .unwrap();
-        let mut text = String::<32>::new();
-        let _ = write!(&mut text, "{co2}");
-
-        let font = FontRenderer::new::<fonts::u8g2_font_fub42_tr>();
-        font.render_aligned(
-            text.as_str(),
-            display.bounding_box().center() + Point::new(0, 10),
-            VerticalPosition::Baseline,
-            HorizontalAlignment::Center,
-            FontColor::Transparent(Color::Black),
-            &mut display,
-        )
-        .unwrap();
-
-        let ppm_font = FontRenderer::new::<fonts::u8g2_font_fub25_tr>();
-        let mut ppm_text = String::<32>::new();
-        let _ = write!(&mut ppm_text, "ppm");
-        ppm_font
-            .render_aligned(
-                ppm_text.as_str(),
-                display.bounding_box().center() + Point::new(0, 40),
-                VerticalPosition::Baseline,
-                HorizontalAlignment::Center,
-                FontColor::Transparent(Color::Black),
-                &mut display,
-            )
-            .unwrap();
-
-        epd.update_frame(&mut exclusive_spi, display.buffer(), &mut delay)
-            .unwrap();
-
-        epd.display_frame(&mut exclusive_spi, &mut delay).unwrap();
-        println!("drawn!");
-
-        epd.sleep(&mut exclusive_spi, &mut delay).unwrap();
+        display
+            .draw(co2, &history)
+            .expect("Failed to draw to the display");
     }
 
     // Power off the neopixel and I2C bus, for low-power sleep.
