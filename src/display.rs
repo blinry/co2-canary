@@ -64,7 +64,12 @@ where
         }
     }
 
-    pub fn draw(&mut self, history: &[u16], temperature: f32) -> Result<(), SPI::Error> {
+    pub fn draw(
+        &mut self,
+        history: &[u16],
+        temperature: f32,
+        battery_voltage: f32,
+    ) -> Result<(), SPI::Error> {
         self.epd
             .set_lut(&mut self.spi, &mut self.delay, Some(RefreshLut::Full))?;
 
@@ -72,6 +77,7 @@ where
 
         self.draw_co2(*latest_co2);
         self.draw_temperature(temperature);
+        self.draw_voltage(battery_voltage);
         self.draw_graph(history);
 
         self.epd
@@ -116,7 +122,6 @@ where
     fn draw_temperature(&mut self, temperature: f32) {
         let temperature_font = FontRenderer::new::<fonts::u8g2_font_fub14_tr>();
         let mut temperature_text = String::<32>::new();
-        // format as 20.3
         let _ = write!(&mut temperature_text, "{temperature:.1} C");
         temperature_font
             .render_aligned(
@@ -124,6 +129,25 @@ where
                 Point::new(5, self.display.size().height as i32 - 5),
                 VerticalPosition::Baseline,
                 HorizontalAlignment::Left,
+                FontColor::Transparent(Color::Black),
+                &mut self.display,
+            )
+            .unwrap();
+    }
+
+    fn draw_voltage(&mut self, voltage: f32) {
+        let voltage_font = FontRenderer::new::<fonts::u8g2_font_fub14_tr>();
+        let mut voltage_text = String::<32>::new();
+        let _ = write!(&mut voltage_text, "{voltage:.2} V");
+        voltage_font
+            .render_aligned(
+                voltage_text.as_str(),
+                Point::new(
+                    self.display.size().width as i32 - 5,
+                    self.display.size().height as i32 - 5,
+                ),
+                VerticalPosition::Baseline,
+                HorizontalAlignment::Right,
                 FontColor::Transparent(Color::Black),
                 &mut self.display,
             )

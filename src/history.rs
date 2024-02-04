@@ -5,7 +5,7 @@ use heapless::Vec;
     time: u64, // TODO: use a proper time type
 }*/
 
-const HISTORY_SIZE: usize = 148;
+const HISTORY_SIZE: usize = 200;
 
 pub struct History {
     values: Vec<u16, HISTORY_SIZE>,
