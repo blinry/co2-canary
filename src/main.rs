@@ -49,6 +49,8 @@ fn main() -> ! {
     let wake_reason = get_wakeup_cause();
     println!("wake reason: {:?}", wake_reason);
 
+    let mut temperature = 0.0;
+
     if true {
         let co2_enable = io.pins.gpio25.into_push_pull_output();
 
@@ -84,6 +86,10 @@ fn main() -> ! {
             HISTORY.add_measurement(co2);
             println!("{:?}", CALIBRATION_DATA);
         }
+
+        temperature = co2_sensor.get_temperature().unwrap();
+
+        co2_sensor.turn_off();
     }
 
     if true {
@@ -110,7 +116,7 @@ fn main() -> ! {
 
         unsafe {
             display
-                .draw(HISTORY.data_for_display())
+                .draw(HISTORY.data_for_display(), temperature)
                 .expect("Failed to draw to the display");
         }
     }

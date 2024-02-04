@@ -156,11 +156,18 @@ where
             .iir_data
             .copy_from_slice(&abc_and_iir_data[10..24]);
 
+        Ok(co2)
+    }
+
+    pub fn get_temperature(&mut self) -> Result<f32, I2C::Error> {
+        let temperature = self.get_2_bytes(0x08)?;
+        Ok((temperature as f32) / 100.0)
+    }
+
+    pub fn turn_off(&mut self) {
         // Set CO2 sensor to sleep.
         // TODO: Use the Result?
         let _ = self.enable_pin.set_low();
-
-        Ok(co2)
     }
 
     fn get_byte(&mut self, reg: u8) -> Result<u8, I2C::Error> {
