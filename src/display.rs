@@ -75,10 +75,7 @@ where
         self.draw_graph(history);
 
         self.epd
-            .update_frame(&mut self.spi, self.display.buffer(), &mut self.delay)?;
-
-        self.epd.display_frame(&mut self.spi, &mut self.delay)?;
-        println!("drawn!");
+            .update_and_display_frame(&mut self.spi, self.display.buffer(), &mut self.delay)?;
 
         self.epd.sleep(&mut self.spi, &mut self.delay)?;
 
