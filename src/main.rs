@@ -8,7 +8,7 @@ mod sunrise;
 use core::time::Duration;
 use display::Display;
 use history::History;
-use sunrise::SunriseSensor;
+use sunrise::{CalibrationData, SunriseSensor};
 
 use embedded_hal_bus::spi::ExclusiveDevice;
 use esp32_hal::{
@@ -30,8 +30,10 @@ use esp_backtrace as _;
 use esp_println::println;
 
 #[ram(rtc_fast)]
-//static mut HISTORY: [u16; HISTORY_LENGTH] = [0u16; HISTORY_LENGTH];
 static mut HISTORY: History = History::new();
+
+#[ram(rtc_fast)]
+static mut CALIBRATION_DATA: CalibrationData = CalibrationData::new();
 
 #[entry]
 fn main() -> ! {
@@ -47,8 +49,6 @@ fn main() -> ! {
     let wake_reason = get_wakeup_cause();
     println!("wake reason: {:?}", wake_reason);
 
-    let mut co2 = 1337;
-
     if true {
         let co2_enable = io.pins.gpio25.into_push_pull_output();
 
@@ -56,22 +56,33 @@ fn main() -> ! {
         let scl = io.pins.gpio20;
         let i2c = I2C::new(peripherals.I2C0, sda, scl, 100u32.kHz(), &clocks);
 
+        let number_of_samples = 2;
         let mut co2_sensor = SunriseSensor::new(i2c, co2_enable, &mut delay);
-        co2_sensor.init().expect("Could not initialize CO2 sensor");
-
         co2_sensor
-            .start_measurement()
-            .expect("Could not start CO2 measurement");
-
-        let mut delay = Delay::new(&clocks);
-        let timer = TimerWakeupSource::new(Duration::from_millis(3400));
-        rtc.sleep_light(&[&timer], &mut delay);
-
-        co2 = co2_sensor.get_co2().unwrap();
-        println!("CO2: {}", co2);
+            .init(number_of_samples)
+            .expect("Could not initialize CO2 sensor");
 
         unsafe {
+            co2_sensor
+                .start_measurement(Some(&CALIBRATION_DATA))
+                .expect("Could not start CO2 measurement");
+        }
+
+        let mut delay = Delay::new(&clocks);
+        let milliseconds_per_sample = 300;
+        let timer = TimerWakeupSource::new(Duration::from_millis(
+            (number_of_samples * milliseconds_per_sample) as u64,
+        ));
+        rtc.sleep_light(&[&timer], &mut delay);
+
+        unsafe {
+            let co2 = co2_sensor.get_co2(&mut CALIBRATION_DATA).unwrap();
+            println!("CO2: {} ppm", co2);
+
+            CALIBRATION_DATA.update_time_ms(rtc.get_time_ms());
+
             HISTORY.add_measurement(co2);
+            println!("{:?}", CALIBRATION_DATA);
         }
     }
 
@@ -99,7 +110,7 @@ fn main() -> ! {
 
         unsafe {
             display
-                .draw(co2, HISTORY.data_for_display())
+                .draw(HISTORY.data_for_display())
                 .expect("Failed to draw to the display");
         }
     }
@@ -111,7 +122,7 @@ fn main() -> ! {
 
     // Deep sleep.
     let mut delay = Delay::new(&clocks);
-    let timer = TimerWakeupSource::new(Duration::from_secs(1));
+    let timer = TimerWakeupSource::new(Duration::from_secs(55));
     println!("sleeping!");
     delay.delay_ms(100u32);
 

@@ -61,11 +61,13 @@ where
         }
     }
 
-    pub fn draw(&mut self, co2: u16, history: &[u16]) -> Result<(), SPI::Error> {
+    pub fn draw(&mut self, history: &[u16]) -> Result<(), SPI::Error> {
         self.epd
             .set_lut(&mut self.spi, &mut self.delay, Some(RefreshLut::Full))?;
 
-        self.draw_co2(co2);
+        let latest_co2 = history.last().expect("No history to display");
+
+        self.draw_co2(*latest_co2);
         self.draw_graph(history);
 
         self.epd
