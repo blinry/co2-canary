@@ -22,17 +22,11 @@ impl CalibrationData {
         }
     }
     pub fn update_time_ms(&mut self, ms: u64) {
-        match self.last_timestamp_ms {
-            Some(last_ms) => {
-                let elapsed_ms = ms - last_ms;
-                let duration = Duration::from_millis(elapsed_ms);
-                let elapsed_hours = duration.as_secs() / 3600;
-                self.increment_hour(elapsed_hours as u16);
-            }
-            None => {
-                // This is the first time we're updating the time.
-                // We don't need to do anything.
-            }
+        if let Some(last_ms) = self.last_timestamp_ms {
+            let elapsed_ms = ms - last_ms;
+            let duration = Duration::from_millis(elapsed_ms);
+            let elapsed_hours = duration.as_secs() / 3600;
+            self.increment_hour(elapsed_hours as u16);
         }
         self.last_timestamp_ms = Some(ms);
     }
@@ -59,8 +53,8 @@ where
 {
     pub fn new(i2c: I2C, enable_pin: ENABLE, delay: DELAY) -> Self {
         SunriseSensor {
-            i2c,
             enable_pin,
+            i2c,
             delay,
         }
     }
@@ -187,12 +181,11 @@ where
         Ok(())
     }
 
-    fn print_2_bytes(&mut self, name: &str, reg: u8) -> Result<(), I2C::Error> {
+    fn print_2_bytes(&mut self, name: &str, reg: u8) {
         let mut buf = [0u8; 2];
         self.i2c.write_read(SUNRISE_ADDR, &[reg], &mut buf).unwrap();
         let value = u16::from_be_bytes(buf);
         println!("{}: {}", name, value);
-        Ok(())
     }
 
     fn set_byte(&mut self, name: &str, reg: u8, value: u8) -> Result<(), I2C::Error> {

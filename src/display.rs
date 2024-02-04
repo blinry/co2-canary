@@ -8,7 +8,10 @@ use embedded_hal::{
     digital::{InputPin, OutputPin},
     spi::SpiDevice,
 };
-use epd_waveshare::{epd1in54_v2::*, prelude::*};
+use epd_waveshare::{
+    epd1in54_v2::{Display1in54, Epd1in54},
+    prelude::*,
+};
 use esp_println::println;
 use heapless::String;
 use u8g2_fonts::{
@@ -155,6 +158,6 @@ where
                 let _ = Line::new(Point::new(x0, y0), Point::new(x1, y1))
                     .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
                     .draw(&mut self.display);
-            })
+            });
     }
 }
