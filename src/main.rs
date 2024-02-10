@@ -103,11 +103,13 @@ fn main() -> ! {
     let analog = peripherals.SENS.split();
     let mut adc1 = ADC::<ADC1>::adc(analog.adc1, adc1_config).unwrap();
     let battery_voltage = nb::block!(adc1.read(&mut battery_voltage_pin)).unwrap() as f32;
-    // No idea why 1.31 is a good factor here, but it matches my measurements at full battery level.
+    println!("Measured value: {}", battery_voltage);
+    // No idea why 1.14 is a good factor here, but it matches my measurements at full battery level.
     // battery voltage 4.22 V <-> 1610 measured value
-    let battery_voltage = battery_voltage * 1.31 * 2.0 / 1000.0;
+    // battery voltage 4.00 V <-> 1744 measured value
+    let battery_voltage = battery_voltage * 1.16 * 2.0 / 1000.0;
 
-    println!("Battery voltage: {:.2} V\n", battery_voltage);
+    println!("Estimated battery voltage: {:.2} V\n", battery_voltage);
 
     if true {
         let sck = io.pins.gpio5;
