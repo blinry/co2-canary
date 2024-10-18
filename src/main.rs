@@ -136,7 +136,7 @@ fn main() -> ! {
 
         unsafe {
             display
-                .draw(HISTORY.data_for_display(), temperature, battery_voltage)
+                .draw(&HISTORY, temperature, battery_voltage)
                 .expect("Failed to draw to the display");
         }
     }

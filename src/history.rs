@@ -1,4 +1,5 @@
-use heapless::Vec;
+use core::slice::Windows;
+use heapless::HistoryBuffer;
 
 /*pub struct Measurement {
     value: u16,
@@ -8,22 +9,37 @@ use heapless::Vec;
 const HISTORY_SIZE: usize = 200;
 
 pub struct History {
-    values: Vec<u16, HISTORY_SIZE>,
+    values: HistoryBuffer<u16, HISTORY_SIZE>,
 }
 
 impl History {
     pub const fn new() -> Self {
-        History { values: Vec::new() }
+        History {
+            values: HistoryBuffer::new(),
+        }
     }
 
     pub fn add_measurement(&mut self, measurement: u16) {
-        if self.values.is_full() {
-            self.values.remove(0);
-        }
-        self.values.push(measurement).unwrap();
+        self.values.write(measurement);
     }
 
-    pub fn data_for_display(&self) -> &[u16] {
-        self.values.as_slice()
+    pub fn data_for_display(&self) -> (usize, impl Iterator<Item = &u16>) {
+        (self.values.len(), self.values.iter())
+    }
+
+    pub fn at(&self, index: usize) -> u16 {
+        self.values[index]
+    }
+
+    pub fn len(&self) -> usize {
+        self.values.len()
+    }
+
+    pub fn max_value(&self) -> Option<u16> {
+        self.values.iter().max().copied()
+    }
+
+    pub fn windows_2(&self) -> Windows<u16> {
+        self.values.windows(2)
     }
 }

@@ -1,3 +1,4 @@
+use crate::history::History;
 use core::fmt::Write;
 use embedded_graphics::{
     prelude::*,
@@ -66,24 +67,26 @@ where
 
     pub fn draw(
         &mut self,
-        history: &[u16],
+        history: &History,
         temperature: f32,
         battery_voltage: f32,
     ) -> Result<(), SPI::Error> {
-        if let Some(latest_co2) = history.last() {
-            self.epd
-                .set_lut(&mut self.spi, &mut self.delay, Some(RefreshLut::Full))?;
+        self.epd
+            .set_lut(&mut self.spi, &mut self.delay, Some(RefreshLut::Full))?;
 
+        self.draw_temperature(temperature);
+        self.draw_voltage(battery_voltage);
+
+        if history.len() > 0 {
+            let latest_co2 = history.data_for_display().1.last().expect("History should not be empty");
             self.draw_co2(*latest_co2);
-            self.draw_temperature(temperature);
-            self.draw_voltage(battery_voltage);
             self.draw_graph(history);
-
-            self.epd
-                .update_and_display_frame(&mut self.spi, self.display.buffer(), &mut self.delay)?;
-
-            self.epd.sleep(&mut self.spi, &mut self.delay)?;
         }
+
+        self.epd
+            .update_and_display_frame(&mut self.spi, self.display.buffer(), &mut self.delay)?;
+
+        self.epd.sleep(&mut self.spi, &mut self.delay)?;
 
         Ok(())
     }
@@ -154,7 +157,7 @@ where
             .unwrap();
     }
 
-    fn draw_graph(&mut self, history: &[u16]) {
+    fn draw_graph(&mut self, history: &History) {
         // Swapped because the display is rotated.
         let width = self.epd.height() as i32;
         let height = self.epd.width() as i32;
@@ -162,23 +165,16 @@ where
         let history_length = history.len();
 
         // Find max value.
-        let max_co2 = history.iter().fold(0, |acc, &x| acc.max(x)) as i32;
+        let max_co2 = history.max_value().expect("No history to display");
 
-        history[0..history.len() - 1]
-            .iter()
-            .enumerate()
-            .for_each(|(i, &value)| {
-                if value == 0 || history[i + 1] == 0 {
-                    return;
-                }
-
-                let x0 = ((i as i32) * width) / ((history_length - 1) as i32);
-                let x1 = (((i + 1) as i32) * width) / ((history_length - 1) as i32);
-                let y0 = height - ((history[i] as i32) * height) / max_co2;
-                let y1 = height - ((history[i + 1] as i32) * height) / max_co2;
-                let _ = Line::new(Point::new(x0, y0), Point::new(x1, y1))
-                    .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
-                    .draw(&mut self.display);
-            });
+        for i in 0..(history_length - 1) {
+            let x0 = ((i as i32) * width) / ((history_length - 1) as i32);
+            let x1 = (((i + 1) as i32) * width) / ((history_length - 1) as i32);
+            let y0 = height - ((history.at(i) as i32) * height) / (max_co2 as i32);
+            let y1 = height - ((history.at(i + 1) as i32) * height) / (max_co2 as i32);
+            let _ = Line::new(Point::new(x0, y0), Point::new(x1, y1))
+                .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
+                .draw(&mut self.display);
+        };
     }
 }
