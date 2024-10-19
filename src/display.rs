@@ -165,7 +165,10 @@ where
         let history_length = history.len();
 
         // Find max value.
-        let max_co2 = history.max_value().expect("No history to display");
+        let mut max_co2 = history.max_value().expect("No history to display");
+        if max_co2 < 1100 {
+            max_co2 = 1100;
+        }
 
         for i in 0..(history_length - 1) {
             let x0 = ((i as i32) * width) / ((history_length - 1) as i32);
@@ -176,5 +179,13 @@ where
                 .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
                 .draw(&mut self.display);
         };
+
+        // Draw dashed line at 1000.
+        let y = height - (1000 * height) / (max_co2 as i32);
+        for i in 0..width {
+            if i % 2 == 0 {
+                self.display.set_pixel(Pixel(Point::new(i, y), Color::Black));
+            }
+        }
     }
 }
