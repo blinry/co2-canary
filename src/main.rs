@@ -84,7 +84,7 @@ fn main() -> ! {
                 Ok(co2) => {
                     println!("CO2: {} ppm", co2);
 
-                    CALIBRATION_DATA.update_time_ms(rtc.time_since_boot().ticks());
+                    CALIBRATION_DATA.update_time_ms(rtc.time_since_boot().ticks() / 1000);
 
                     HISTORY.add_measurement(co2);
                 println!("{:?}", CALIBRATION_DATA);
