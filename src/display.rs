@@ -70,20 +70,20 @@ where
         temperature: f32,
         battery_voltage: f32,
     ) -> Result<(), SPI::Error> {
-        self.epd
-            .set_lut(&mut self.spi, &mut self.delay, Some(RefreshLut::Full))?;
+        if let Some(latest_co2) = history.last() {
+            self.epd
+                .set_lut(&mut self.spi, &mut self.delay, Some(RefreshLut::Full))?;
 
-        let latest_co2 = history.last().expect("No history to display");
+            self.draw_co2(*latest_co2);
+            self.draw_temperature(temperature);
+            self.draw_voltage(battery_voltage);
+            self.draw_graph(history);
 
-        self.draw_co2(*latest_co2);
-        self.draw_temperature(temperature);
-        self.draw_voltage(battery_voltage);
-        self.draw_graph(history);
+            self.epd
+                .update_and_display_frame(&mut self.spi, self.display.buffer(), &mut self.delay)?;
 
-        self.epd
-            .update_and_display_frame(&mut self.spi, self.display.buffer(), &mut self.delay)?;
-
-        self.epd.sleep(&mut self.spi, &mut self.delay)?;
+            self.epd.sleep(&mut self.spi, &mut self.delay)?;
+        }
 
         Ok(())
     }

@@ -53,8 +53,6 @@ fn main() -> ! {
 
     let mut temperature = 0.0;
 
-    //let mut adc1 = ADC::adc(analog.adc1, adc1_config).unwrap();
-
     if true {
         let co2_enable = Output::new(io.pins.gpio25, Level::High);
 
@@ -74,6 +72,7 @@ fn main() -> ! {
                 .expect("Could not start CO2 measurement");
         }
 
+        // TODO: I can probably lower this?
         let milliseconds_per_sample = 300;
         let timer = TimerWakeupSource::new(Duration::from_millis(
             (number_of_samples * milliseconds_per_sample) as u64,
@@ -81,13 +80,19 @@ fn main() -> ! {
         rtc.sleep_light(&[&timer]);
 
         unsafe {
-            let co2 = co2_sensor.get_co2(&mut CALIBRATION_DATA).unwrap();
-            println!("CO2: {} ppm", co2);
+            match co2_sensor.get_co2(&mut CALIBRATION_DATA) {
+                Ok(co2) => {
+                    println!("CO2: {} ppm", co2);
 
-            CALIBRATION_DATA.update_time_ms(rtc.time_since_boot().ticks());
+                    CALIBRATION_DATA.update_time_ms(rtc.time_since_boot().ticks());
 
-            HISTORY.add_measurement(co2);
-            println!("{:?}", CALIBRATION_DATA);
+                    HISTORY.add_measurement(co2);
+                println!("{:?}", CALIBRATION_DATA);
+                }
+                Err(e) => {
+                    println!("Error: {:?}", e);
+                }
+            }
         }
 
         temperature = co2_sensor.get_temperature().unwrap();
