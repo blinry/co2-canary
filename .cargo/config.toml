@@ -2,11 +2,7 @@
 runner = "espflash flash --monitor"
 
 [build]
-rustflags = [
-  "-C", "link-arg=-Tlinkall.x",
-
-  "-C", "link-arg=-nostartfiles",
-]
+rustflags = ["-C", "link-arg=-nostartfiles"]
 
 target = "xtensa-esp32-none-elf"
 
