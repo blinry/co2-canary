@@ -81,6 +81,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "co2-sensor"
+version = "0.1.0"
+dependencies = [
+ "embedded-graphics",
+ "embedded-hal 1.0.0",
+ "embedded-hal-bus",
+ "epd-waveshare",
+ "esp-backtrace",
+ "esp-hal",
+ "esp-println",
+ "heapless",
+ "u8g2-fonts",
+]
+
+[[package]]
 name = "critical-section"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -375,21 +390,6 @@ dependencies = [
  "void",
  "xtensa-lx",
  "xtensa-lx-rt",
-]
-
-[[package]]
-name = "esp-hal-blinky"
-version = "0.1.0"
-dependencies = [
- "embedded-graphics",
- "embedded-hal 1.0.0",
- "embedded-hal-bus",
- "epd-waveshare",
- "esp-backtrace",
- "esp-hal",
- "esp-println",
- "heapless",
- "u8g2-fonts",
 ]
 
 [[package]]
