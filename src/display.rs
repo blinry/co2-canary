@@ -2,7 +2,7 @@ use crate::history::History;
 use core::fmt::Write;
 use embedded_graphics::{
     prelude::*,
-    primitives::{Line, PrimitiveStyle},
+    primitives::{Line, Rectangle, PrimitiveStyle},
 };
 use embedded_hal::{
     delay::DelayNs,
@@ -20,6 +20,8 @@ use u8g2_fonts::{
     types::{FontColor, HorizontalAlignment, VerticalPosition},
     FontRenderer,
 };
+
+const CRITICAL_CO2: u16 = 1000;
 
 pub struct Display<SPI, BUSY, DC, RST, DELAY> {
     epd: Epd1in54<SPI, BUSY, DC, RST, DELAY>,
@@ -75,12 +77,12 @@ where
             .set_lut(&mut self.spi, &mut self.delay, Some(RefreshLut::Full))?;
 
         self.draw_temperature(temperature);
-        self.draw_voltage(battery_voltage);
+        //self.draw_voltage(battery_voltage);
 
         if history.len() > 0 {
             let latest_co2 = history.data_for_display().1.last().expect("History should not be empty");
-            self.draw_co2(*latest_co2);
             self.draw_graph(history);
+            self.draw_co2(*latest_co2);
         }
 
         self.epd
@@ -96,13 +98,34 @@ where
         let co2_font = FontRenderer::new::<fonts::u8g2_font_fub42_tr>();
         let mut co2_text = String::<32>::new();
         let _ = write!(&mut co2_text, "{co2}");
+
+        let mut font_color = FontColor::Transparent(Color::Black);
+
+        if co2 >= CRITICAL_CO2 {
+            font_color = FontColor::Transparent(Color::White);
+
+            // Draw black box under text.
+            let rect = co2_font.get_rendered_dimensions_aligned(
+                co2_text.as_str(),
+                self.display.bounding_box().center() + Point::new(0, 5),
+                VerticalPosition::Baseline,
+                HorizontalAlignment::Center,
+            ).expect("Should be able to look up all glyphs").expect("Should result in a rectangle");
+
+            let padding = 5u32;
+            let _ = Rectangle::new(
+                rect.top_left - Point::new(padding as i32, padding as i32),
+                rect.size + Size::new(2*padding, 2*padding),
+            ).into_styled(PrimitiveStyle::with_fill(Color::Black)).draw(&mut self.display);
+        }
+
         co2_font
             .render_aligned(
                 co2_text.as_str(),
                 self.display.bounding_box().center() + Point::new(0, 5),
                 VerticalPosition::Baseline,
                 HorizontalAlignment::Center,
-                FontColor::Transparent(Color::Black),
+                font_color,
                 &mut self.display,
             )
             .unwrap();
@@ -166,8 +189,8 @@ where
 
         // Find max value.
         let mut max_co2 = history.max_value().expect("No history to display");
-        if max_co2 < 1100 {
-            max_co2 = 1100;
+        if max_co2 < CRITICAL_CO2 + 100 {
+            max_co2 = CRITICAL_CO2 + 100;
         }
 
         for i in 0..(history_length - 1) {
@@ -180,12 +203,12 @@ where
                 .draw(&mut self.display);
         };
 
-        // Draw dashed line at 1000.
-        let y = height - (1000 * height) / (max_co2 as i32);
-        for i in 0..width {
-            if i % 2 == 0 {
-                self.display.set_pixel(Pixel(Point::new(i, y), Color::Black));
-            }
+        // Draw dashed line at critical value.
+        let y = height - ((CRITICAL_CO2 as i32) * height) / (max_co2 as i32);
+        for x in (0..width).step_by(10) {
+            let _ = Line::new(Point::new(x, y), Point::new(x+5, y))
+                .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
+                .draw(&mut self.display);
         }
     }
 }
