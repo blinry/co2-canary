@@ -83,16 +83,15 @@ fn main() -> ! {
             match co2_sensor.get_co2(&mut CALIBRATION_DATA) {
                 Ok(co2) => {
                     println!("CO2: {} ppm", co2);
-
-                    CALIBRATION_DATA.update_time_ms(rtc.time_since_boot().ticks() / 1000);
-
                     HISTORY.add_measurement(co2);
-                println!("{:?}", CALIBRATION_DATA);
                 }
                 Err(e) => {
                     println!("Error: {:?}", e);
+                    HISTORY.add_measurement(0);
                 }
             }
+            CALIBRATION_DATA.update_time_ms(rtc.time_since_boot().ticks() / 1000);
+            println!("{:?}", CALIBRATION_DATA);
         }
 
         temperature = co2_sensor.get_temperature().unwrap();
