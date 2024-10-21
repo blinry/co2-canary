@@ -23,12 +23,12 @@ impl History {
         self.values.write(measurement);
     }
 
-    pub fn data_for_display(&self) -> (usize, impl Iterator<Item = &u16>) {
-        (self.values.len(), self.values.iter())
+    pub fn recent(&self) -> Option<u16> {
+        self.values.recent().copied()
     }
 
-    pub fn at(&self, index: usize) -> u16 {
-        self.values[index]
+    pub fn iter(&self) -> impl Iterator<Item = &u16> {
+        self.values.oldest_ordered()
     }
 
     pub fn len(&self) -> usize {

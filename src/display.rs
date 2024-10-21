@@ -1,4 +1,5 @@
 use crate::history::History;
+use itertools::Itertools;
 use core::fmt::Write;
 use embedded_graphics::{
     prelude::*,
@@ -79,10 +80,9 @@ where
         self.draw_temperature(temperature);
         //self.draw_voltage(battery_voltage);
 
-        if history.len() > 0 {
-            let latest_co2 = history.data_for_display().1.last().expect("History should not be empty");
+        if let Some(latest_co2) = history.recent() {
             self.draw_graph(history);
-            self.draw_co2(*latest_co2);
+            self.draw_co2(latest_co2);
         }
 
         self.epd
@@ -193,12 +193,16 @@ where
             max_co2 = CRITICAL_CO2 + 100;
         }
 
-        for i in 0..(history_length - 1) {
-            let x0 = ((i as i32) * width) / ((history_length - 1) as i32);
-            let x1 = (((i + 1) as i32) * width) / ((history_length - 1) as i32);
-            let y0 = height - ((history.at(i) as i32) * height) / (max_co2 as i32);
-            let y1 = height - ((history.at(i + 1) as i32) * height) / (max_co2 as i32);
-            let _ = Line::new(Point::new(x0, y0), Point::new(x1, y1))
+        let pixels_per_value = width as f32 / history_length as f32;
+
+        for ((i1, v1), (i2, v2)) in history.iter().enumerate().tuple_windows(){
+            let y1 = height - ((*v1 as i32) * height) / (max_co2 as i32);
+            let y2 = height - ((*v2 as i32) * height) / (max_co2 as i32);
+
+            let x1 = width - (i1 as f32 * pixels_per_value) as i32;
+            let x2 = width - (i2 as f32 * pixels_per_value) as i32;
+
+            let _ = Line::new(Point::new(x1, y1), Point::new(x2, y2))
                 .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
                 .draw(&mut self.display);
         };
