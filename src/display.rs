@@ -193,14 +193,14 @@ where
             max_co2 = CRITICAL_CO2 + 100;
         }
 
-        let pixels_per_value = width as f32 / history_length as f32;
+        let pixels_per_value = width as f32 / (History::max_size()-1) as f32;
 
         for ((i1, v1), (i2, v2)) in history.iter().enumerate().tuple_windows(){
             let y1 = height - ((*v1 as i32) * height) / (max_co2 as i32);
             let y2 = height - ((*v2 as i32) * height) / (max_co2 as i32);
 
-            let x1 = width - (i1 as f32 * pixels_per_value) as i32;
-            let x2 = width - (i2 as f32 * pixels_per_value) as i32;
+            let x1 = (i1 as f32 * pixels_per_value) as i32;
+            let x2 = (i2 as f32 * pixels_per_value) as i32;
 
             let _ = Line::new(Point::new(x1, y1), Point::new(x2, y2))
                 .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))

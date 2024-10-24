@@ -6,7 +6,7 @@ use heapless::HistoryBuffer;
     time: u64, // TODO: use a proper time type
 }*/
 
-const HISTORY_SIZE: usize = 200;
+const HISTORY_SIZE: usize = 60*3;
 
 pub struct History {
     values: HistoryBuffer<u16, HISTORY_SIZE>,
@@ -41,5 +41,9 @@ impl History {
 
     pub fn windows_2(&self) -> Windows<u16> {
         self.values.windows(2)
+    }
+
+    pub fn max_size() -> usize {
+        HISTORY_SIZE
     }
 }
