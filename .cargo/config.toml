@@ -1,10 +1,15 @@
-[target.xtensa-esp32-none-elf]
+[target.riscv32imac-unknown-none-elf]
 runner = "espflash flash --monitor"
 
-[build]
-rustflags = ["-C", "link-arg=-nostartfiles"]
+[env]
+ESP_LOG = "info"
 
-target = "xtensa-esp32-none-elf"
+[build]
+# Required to obtain backtraces (e.g. when using the "esp-backtrace" crate.)
+# NOTE: May negatively impact performance of produced code
+rustflags = ["-C", "force-frame-pointers"]
+
+target = "riscv32imac-unknown-none-elf"
 
 [unstable]
 build-std = ["core"]

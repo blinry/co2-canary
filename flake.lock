@@ -1,25 +1,5 @@
 {
   "nodes": {
-    "esp32": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1725870727,
-        "narHash": "sha256-cx3Lnw2g7evkzlIXq52ihHJFobxKEANMqowC5uibhFg=",
-        "owner": "knarkzel",
-        "repo": "esp32",
-        "rev": "be09a0a183482d9c5bb6cc9e5d9c01d43937cc43",
-        "type": "github"
-      },
-      "original": {
-        "owner": "knarkzel",
-        "repo": "esp32",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1729070438,
@@ -38,7 +18,6 @@
     },
     "root": {
       "inputs": {
-        "esp32": "esp32",
         "nixpkgs": "nixpkgs"
       }
     }

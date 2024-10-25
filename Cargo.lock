@@ -332,7 +332,6 @@ checksum = "cb7660d85e3e7b0e113aaeeffb1a155e64a09a5035d4104031875acdba4cb68e"
 dependencies = [
  "esp-build",
  "esp-println",
- "semihosting",
 ]
 
 [[package]]
@@ -385,17 +384,17 @@ dependencies = [
  "esp-hal-procmacros",
  "esp-metadata",
  "esp-riscv-rt",
- "esp32",
+ "esp32c6",
  "fugit",
  "nb 1.1.0",
  "paste",
  "portable-atomic",
  "rand_core",
+ "riscv",
  "serde",
  "strum",
  "ufmt-write",
  "void",
- "xtensa-lx",
  "xtensa-lx-rt",
 ]
 
@@ -408,6 +407,7 @@ dependencies = [
  "darling",
  "document-features",
  "litrs",
+ "object",
  "proc-macro-crate",
  "proc-macro-error2",
  "proc-macro2",
@@ -451,14 +451,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "esp32"
-version = "0.33.0"
+name = "esp32c6"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "85287b57fae3e318b62fd860787b1ac85a5e7bf91ad43eb66837c5e567218009"
+checksum = "f0c05e230022cf5a8d10e9bcdc4878c0886a3a5701a96d6763cb42562e42ecd7"
 dependencies = [
  "critical-section",
  "vcell",
- "xtensa-lx",
 ]
 
 [[package]]
@@ -581,16 +580,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lock_api"
-version = "0.4.12"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "07af8b9cdd281b7915f413fa73f29ebd5d55d0d3f0155584dade1ff18cea1b17"
-dependencies = [
- "autocfg",
- "scopeguard",
-]
-
-[[package]]
 name = "log"
 version = "0.4.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -645,6 +634,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
 dependencies = [
  "autocfg",
+]
+
+[[package]]
+name = "object"
+version = "0.36.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aedf0a2d09c573ed1d8d85b30c119153926a2b36dce0ab28322c09a117a4683e"
+dependencies = [
+ "memchr",
 ]
 
 [[package]]
@@ -760,18 +758,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0e819f2bc632f285be6d7cd36e25940d45b2391dd6d9b939e79de557f7014248"
 
 [[package]]
-name = "scopeguard"
-version = "1.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
-
-[[package]]
-name = "semihosting"
-version = "0.1.16"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5c5996e5d1dec34b0dff3285e27124e70964504e3fd361bce330dc476cebafd"
-
-[[package]]
 name = "serde"
 version = "1.0.210"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -798,15 +784,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "87607cb1398ed59d48732e575a4c28a7a8ebf2454b964fe3f224f2afc07909e1"
 dependencies = [
  "serde",
-]
-
-[[package]]
-name = "spin"
-version = "0.9.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6980e8d7511241f8acf4aebddbb1ff938df5eebe98691418c4468d0b72a96a67"
-dependencies = [
- "lock_api",
 ]
 
 [[package]]
@@ -1040,7 +1017,6 @@ checksum = "e758f94e1a1f71758f94052a2766dcb12604998eb372b8b2e30576e3ab1ba1e6"
 dependencies = [
  "bare-metal",
  "mutex-trait",
- "spin",
 ]
 
 [[package]]
