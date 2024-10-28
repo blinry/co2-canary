@@ -17,7 +17,6 @@ use sunrise::{CalibrationData, SunriseSensor};
 use embedded_hal_bus::spi::ExclusiveDevice;
 use esp_backtrace as _;
 use esp_hal::{
-    analog::adc::{Adc, AdcConfig, Attenuation},
     delay::Delay,
     entry,
     gpio::{Input, Io, Level, NoPin, Output, Pull},
@@ -51,11 +50,15 @@ fn main() -> ! {
     let wake_reason = get_wakeup_cause();
     println!("wake reason: {:?}", wake_reason);
 
+    let mut neopixel_and_i2c_power = Output::new(io.pins.gpio20, Level::Low);
+
     let mut temperature = 0.0;
 
     if true {
-        let co2_enable = Output::new(io.pins.gpio3, Level::High);
+        // Required for I2C to work!
+        neopixel_and_i2c_power.set_high();
 
+        let co2_enable = Output::new(io.pins.gpio3, Level::High);
         let sda = io.pins.gpio19;
         let scl = io.pins.gpio18;
         let i2c = I2c::new(peripherals.I2C0, sda, scl, 100u32.kHz());
@@ -129,18 +132,16 @@ fn main() -> ! {
 
     // Power off the neopixel and I2C bus, for low-power sleep.
     // See https://learn.adafruit.com/adafruit-esp32-c6-feather/low-power-use
-    let _neopixel_and_i2c_power = Output::new(io.pins.gpio20, Level::Low);
-    //neopixel_and_i2c_power.set_low().unwrap();
+    neopixel_and_i2c_power.set_low();
 
     // Deep sleep.
     let mut delay = Delay::new();
-    let timer = TimerWakeupSource::new(Duration::from_secs(55));
+    let timer = TimerWakeupSource::new(Duration::from_secs(0));
     println!("sleeping!");
     delay.delay_ms(100u32);
 
-    //let mut cfg = RtcSleepConfig::deep();
+    let cfg = RtcSleepConfig::deep();
     //cfg.set_rtc_fastmem_pd_en(false);
-    //rtc.sleep(&cfg, &[&timer]);
-    //panic!("We should never get here after the sleep() call.");
-    loop {}
+    rtc.sleep(&cfg, &[&timer]);
+    panic!("We should never get here after the sleep() call.");
 }
