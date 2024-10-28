@@ -219,4 +219,8 @@ where
         }
         Ok(())
     }
+
+    pub fn release(self) -> I2C {
+        self.i2c
+    }
 }

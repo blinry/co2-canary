@@ -1,9 +1,8 @@
 use crate::history::History;
-use itertools::Itertools;
 use core::fmt::Write;
 use embedded_graphics::{
     prelude::*,
-    primitives::{Line, Rectangle, PrimitiveStyle},
+    primitives::{Line, PrimitiveStyle, Rectangle},
 };
 use embedded_hal::{
     delay::DelayNs,
@@ -16,6 +15,7 @@ use epd_waveshare::{
 };
 use esp_println::println;
 use heapless::String;
+use itertools::Itertools;
 use u8g2_fonts::{
     fonts,
     types::{FontColor, HorizontalAlignment, VerticalPosition},
@@ -72,13 +72,16 @@ where
         &mut self,
         history: &History,
         temperature: f32,
-        battery_voltage: f32,
+        battery_percent: Option<f32>,
     ) -> Result<(), SPI::Error> {
         self.epd
             .set_lut(&mut self.spi, &mut self.delay, Some(RefreshLut::Full))?;
 
         self.draw_temperature(temperature);
-        //self.draw_voltage(battery_voltage);
+
+        if let Some(battery_voltage) = battery_percent {
+            self.draw_battery(battery_voltage);
+        }
 
         if let Some(latest_co2) = history.recent() {
             self.draw_graph(history);
@@ -105,18 +108,23 @@ where
             font_color = FontColor::Transparent(Color::White);
 
             // Draw black box under text.
-            let rect = co2_font.get_rendered_dimensions_aligned(
-                co2_text.as_str(),
-                self.display.bounding_box().center() + Point::new(0, 5),
-                VerticalPosition::Baseline,
-                HorizontalAlignment::Center,
-            ).expect("Should be able to look up all glyphs").expect("Should result in a rectangle");
+            let rect = co2_font
+                .get_rendered_dimensions_aligned(
+                    co2_text.as_str(),
+                    self.display.bounding_box().center() + Point::new(0, 5),
+                    VerticalPosition::Baseline,
+                    HorizontalAlignment::Center,
+                )
+                .expect("Should be able to look up all glyphs")
+                .expect("Should result in a rectangle");
 
             let padding = 5u32;
             let _ = Rectangle::new(
                 rect.top_left - Point::new(padding as i32, padding as i32),
-                rect.size + Size::new(2*padding, 2*padding),
-            ).into_styled(PrimitiveStyle::with_fill(Color::Black)).draw(&mut self.display);
+                rect.size + Size::new(2 * padding, 2 * padding),
+            )
+            .into_styled(PrimitiveStyle::with_fill(Color::Black))
+            .draw(&mut self.display);
         }
 
         co2_font
@@ -161,13 +169,13 @@ where
             .unwrap();
     }
 
-    fn draw_voltage(&mut self, voltage: f32) {
-        let voltage_font = FontRenderer::new::<fonts::u8g2_font_fub14_tr>();
-        let mut voltage_text = String::<32>::new();
-        let _ = write!(&mut voltage_text, "{voltage:.2} V");
-        voltage_font
+    fn draw_battery(&mut self, percent: f32) {
+        let battery_font = FontRenderer::new::<fonts::u8g2_font_fub14_tr>();
+        let mut battery_text = String::<32>::new();
+        let _ = write!(&mut battery_text, "{percent:.0}%");
+        battery_font
             .render_aligned(
-                voltage_text.as_str(),
+                battery_text.as_str(),
                 Point::new(
                     self.display.size().width as i32 - 5,
                     self.display.size().height as i32 - 5,
@@ -193,9 +201,9 @@ where
             max_co2 = CRITICAL_CO2 + 100;
         }
 
-        let pixels_per_value = width as f32 / (History::max_size()-1) as f32;
+        let pixels_per_value = width as f32 / (History::max_size() - 1) as f32;
 
-        for ((i1, v1), (i2, v2)) in history.iter().enumerate().tuple_windows(){
+        for ((i1, v1), (i2, v2)) in history.iter().enumerate().tuple_windows() {
             let y1 = height - ((*v1 as i32) * height) / (max_co2 as i32);
             let y2 = height - ((*v2 as i32) * height) / (max_co2 as i32);
 
@@ -205,12 +213,12 @@ where
             let _ = Line::new(Point::new(x1, y1), Point::new(x2, y2))
                 .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
                 .draw(&mut self.display);
-        };
+        }
 
         // Draw dashed line at critical value.
         let y = height - ((CRITICAL_CO2 as i32) * height) / (max_co2 as i32);
         for x in (0..width).step_by(10) {
-            let _ = Line::new(Point::new(x, y), Point::new(x+5, y))
+            let _ = Line::new(Point::new(x, y), Point::new(x + 5, y))
                 .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
                 .draw(&mut self.display);
         }

@@ -54,14 +54,15 @@ fn main() -> ! {
 
     let mut temperature = 0.0;
 
-    if true {
-        // Required for I2C to work!
-        neopixel_and_i2c_power.set_high();
+    // Required for I2C to work!
+    neopixel_and_i2c_power.set_high();
 
+    let sda = io.pins.gpio19;
+    let scl = io.pins.gpio18;
+    let mut i2c = I2c::new(peripherals.I2C0, sda, scl, 100.kHz());
+
+    if true {
         let co2_enable = Output::new(io.pins.gpio3, Level::High);
-        let sda = io.pins.gpio19;
-        let scl = io.pins.gpio18;
-        let i2c = I2c::new(peripherals.I2C0, sda, scl, 100u32.kHz());
 
         let number_of_samples = 2;
         let mut co2_sensor = SunriseSensor::new(i2c, co2_enable, &mut delay);
@@ -100,9 +101,13 @@ fn main() -> ! {
         temperature = co2_sensor.get_temperature().unwrap();
 
         co2_sensor.turn_off();
+        i2c = co2_sensor.release();
     }
 
-    let battery_voltage = 0.0;
+    let battery_voltage = {
+        let mut battery = max17048::Max17048::new(i2c, 0x36);
+        battery.soc().ok().map(|x| x as f32)
+    };
 
     if true {
         let sck = io.pins.gpio21;
@@ -136,7 +141,7 @@ fn main() -> ! {
 
     // Deep sleep.
     let mut delay = Delay::new();
-    let timer = TimerWakeupSource::new(Duration::from_secs(0));
+    let timer = TimerWakeupSource::new(Duration::from_secs(25));
     println!("sleeping!");
     delay.delay_ms(100u32);
 
