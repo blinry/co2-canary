@@ -192,23 +192,25 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "J"
-				(at 0 22.225 0)
+			(property "Reference" "J2"
+				(at -7.874 19.304 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify right)
 				)
 			)
-			(property "Value" "USB_C_Receptacle_USB2.0_16P"
-				(at 0 19.685 0)
+			(property "Value" "USB-C Receptacle"
+				(at -11.684 12.446 90)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify right)
 				)
 			)
-			(property "Footprint" ""
+			(property "Footprint" "Connector_USB:USB_C_Receptacle_G-Switch_GT-USB-7010ASV"
 				(at 3.81 0 0)
 				(effects
 					(font
@@ -603,7 +605,7 @@
 						)
 					)
 				)
-				(pin passive line
+				(pin power_out line
 					(at 15.24 15.24 180)
 					(length 5.08)
 					(name "VBUS"
@@ -1743,7 +1745,7 @@
 						)
 					)
 				)
-				(pin power_out line
+				(pin power_in line
 					(at -5.08 -12.7 0)
 					(length 3.81)
 					(name "Pin_17"
@@ -2039,23 +2041,23 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "J3"
-				(at 5.588 8.128 0)
+			(property "Reference" "U4"
+				(at 5.715 7.62 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "MCP73831"
-				(at 5.588 5.588 0)
+			(property "Value" "MAX17048"
+				(at 5.842 5.334 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Footprint" ""
+			(property "Footprint" "Package_DFN_QFN:DFN-8-1EP_2x2mm_P0.5mm_EP1.05x1.75mm"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2246,7 +2248,7 @@
 						)
 					)
 				)
-				(pin power_out line
+				(pin power_in line
 					(at -5.08 -5.08 0)
 					(length 3.81)
 					(name "Pin_4"
@@ -3161,7 +3163,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3215,7 +3217,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3323,7 +3325,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3647,7 +3649,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3665,7 +3667,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3683,7 +3685,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3701,7 +3703,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3737,7 +3739,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3755,7 +3757,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3773,7 +3775,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3791,7 +3793,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3809,7 +3811,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3827,7 +3829,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3845,7 +3847,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3863,7 +3865,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3881,7 +3883,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3899,7 +3901,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3935,7 +3937,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3953,7 +3955,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3971,7 +3973,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -3989,7 +3991,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -33.02 90)
+					(at 0 -26.67 90)
 					(length 2.54) hide
 					(name "GND"
 						(effects
@@ -6076,6 +6078,10 @@
 		(uuid "9b294f84-f912-4ab0-80d9-cb787efb2a7a")
 	)
 	(no_connect
+		(at 171.45 48.26)
+		(uuid "b600e155-28d8-4f8c-81c3-a356fc3c6723")
+	)
+	(no_connect
 		(at 171.45 88.9)
 		(uuid "b7873752-a2e2-4b61-99ac-69f9a40fd986")
 	)
@@ -6086,6 +6092,10 @@
 	(no_connect
 		(at 45.72 59.69)
 		(uuid "d9c80395-b225-4258-9f98-1433db079b68")
+	)
+	(no_connect
+		(at 171.45 45.72)
+		(uuid "dfde6143-472e-4947-97aa-1c52d953d43f")
 	)
 	(wire
 		(pts
@@ -7699,8 +7709,8 @@
 	)
 	(text_box "Fuel gauge"
 		(exclude_from_sim no)
-		(at 12.095 165.9646 0)
-		(size 64.105 31.9251)
+		(at 11.9966 165.9646 0)
+		(size 64.2034 32.0492)
 		(stroke
 			(width 0)
 			(type default)
@@ -7825,8 +7835,8 @@
 	)
 	(text_box "Li-po charger"
 		(exclude_from_sim no)
-		(at 12.095 120.65 0)
-		(size 64.105 45.2161)
+		(at 12.0233 120.65 0)
+		(size 64.1767 45.2649)
 		(stroke
 			(width 0)
 			(type default)
@@ -7877,6 +7887,18 @@
 			(justify left)
 		)
 		(uuid "2fd1d833-c8c9-4a26-bd3d-59d3f7d95f14")
+	)
+	(text "Add ESD protection?"
+		(exclude_from_sim no)
+		(at 58.928 57.15 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(italic yes)
+				(color 255 0 0 1)
+			)
+		)
+		(uuid "8d80e636-febb-40ab-bcfe-6d6a7f856e23")
 	)
 	(text "More filtering?"
 		(exclude_from_sim no)
