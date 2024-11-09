@@ -189,7 +189,8 @@ where
 
     fn draw_graph(&mut self, history: &History) {
         // Swapped because the display is rotated.
-        let width = self.epd.height() as i32;
+        // Subtract 1 from width to make the last value more visible.
+        let width = self.epd.height() as i32 - 1;
         let height = self.epd.width() as i32;
 
         // Find max value.

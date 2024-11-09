@@ -6,7 +6,7 @@ use heapless::HistoryBuffer;
     time: u64, // TODO: use a proper time type
 }*/
 
-const HISTORY_SIZE: usize = 60*3;
+const HISTORY_SIZE: usize = 60 * 6 * 2; // values
 
 pub struct History {
     values: HistoryBuffer<u16, HISTORY_SIZE>,

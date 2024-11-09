@@ -70,9 +70,7 @@ where
         self.delay.delay_ms(5u32);
 
         let single_measurement_mode = 1;
-        println!("here");
         self.set_2_bytes("measurement mode", 0x95, single_measurement_mode)?;
-        println!("there");
 
         self.set_2_bytes("number of samples", 0x98, number_of_samples)?;
 
@@ -174,9 +172,7 @@ where
 
     fn get_2_bytes(&mut self, reg: u8) -> Result<u16, I2C::Error> {
         let mut buf = [0u8; 2];
-        println!("ook");
         self.i2c.write_read(SUNRISE_ADDR, &[reg], &mut buf)?;
-        println!("eek");
         Ok(u16::from_be_bytes(buf))
     }
 
@@ -207,7 +203,6 @@ where
 
     fn set_2_bytes(&mut self, name: &str, reg: u8, value: u16) -> Result<(), I2C::Error> {
         let current_value = self.get_2_bytes(reg)?;
-        println!("meh");
         if current_value == value {
             println!("{} is already set to {}", name, value);
         } else {

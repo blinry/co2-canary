@@ -18,9 +18,9 @@ use esp_hal::{
     gpio::{Input, Io, Level, NoPin, Output, Pull},
     i2c::I2c,
     prelude::*,
-    rtc_cntl::{get_reset_reason, get_wakeup_cause, sleep::TimerWakeupSource, Rtc, SocResetReason},
+    rtc_cntl::{sleep::TimerWakeupSource, Rtc},
     spi::{master::Spi, SpiMode},
-    Cpu,
+    time,
 };
 use esp_println::println;
 
@@ -30,17 +30,17 @@ static mut HISTORY: History = History::new();
 #[ram(rtc_fast)]
 static mut CALIBRATION_DATA: CalibrationData = CalibrationData::new();
 
+#[ram(rtc_fast)]
+static mut LAST_DISPLAYED_CO2: u16 = 0;
+
 #[entry]
 fn main() -> ! {
+    let wakeup_time = time::now();
+
     let peripherals = esp_hal::init(esp_hal::Config::default());
     let mut delay = Delay::new();
     let io = Io::new(peripherals.GPIO, peripherals.IO_MUX);
     let mut rtc = Rtc::new(peripherals.LPWR);
-
-    let reason = get_reset_reason(Cpu::ProCpu).unwrap_or(SocResetReason::ChipPowerOn);
-    println!("reset reason: {:?}", reason);
-    let wake_reason = get_wakeup_cause();
-    println!("wake reason: {:?}", wake_reason);
 
     let mut neopixel_and_i2c_power = Output::new(io.pins.gpio20, Level::Low);
 
@@ -101,7 +101,12 @@ fn main() -> ! {
         battery.soc().ok().map(|x| x as f32)
     };
 
-    if true {
+    // Refresh the display if the CO2 value has changed by more than a certain amount.
+    let refresh_threshold = 50; // ppm
+    let refresh_display =
+        unsafe { HISTORY.recent().unwrap_or(0).abs_diff(LAST_DISPLAYED_CO2) >= refresh_threshold };
+
+    if refresh_display {
         let sck = io.pins.gpio21;
         let mosi = io.pins.gpio22;
         let miso = io.pins.gpio23;
@@ -124,6 +129,7 @@ fn main() -> ! {
             display
                 .draw(&HISTORY, temperature, battery_voltage)
                 .expect("Failed to draw to the display");
+            LAST_DISPLAYED_CO2 = HISTORY.recent().unwrap_or(0);
         }
     }
 
@@ -132,6 +138,11 @@ fn main() -> ! {
     neopixel_and_i2c_power.set_low();
 
     // Deep sleep.
-    let timer = TimerWakeupSource::new(Duration::from_secs(55));
+    let wakeup_interval = Duration::from_secs(30);
+    let awake_duration = time::now() - wakeup_time;
+    // (Convert to std Duration.)
+    let awake_duration = Duration::from_millis(awake_duration.to_millis() as u64);
+    let remaining_time = wakeup_interval - awake_duration;
+    let timer = TimerWakeupSource::new(remaining_time);
     rtc.sleep_deep(&[&timer]);
 }
