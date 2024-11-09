@@ -13,7 +13,6 @@ use epd_waveshare::{
     epd1in54_v2::{Display1in54, Epd1in54},
     prelude::*,
 };
-use esp_println::println;
 use heapless::String;
 use itertools::Itertools;
 use u8g2_fonts::{
@@ -192,8 +191,6 @@ where
         // Swapped because the display is rotated.
         let width = self.epd.height() as i32;
         let height = self.epd.width() as i32;
-
-        let history_length = history.len();
 
         // Find max value.
         let mut max_co2 = history.max_value().expect("No history to display");

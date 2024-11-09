@@ -5,12 +5,8 @@ mod display;
 mod history;
 mod sunrise;
 
-use core::{
-    ptr::{addr_of, addr_of_mut},
-    time::Duration,
-};
+use core::time::Duration;
 use display::Display;
-use embedded_hal::delay::DelayNs;
 use history::History;
 use sunrise::{CalibrationData, SunriseSensor};
 
@@ -22,11 +18,7 @@ use esp_hal::{
     gpio::{Input, Io, Level, NoPin, Output, Pull},
     i2c::I2c,
     prelude::*,
-    rtc_cntl::{
-        get_reset_reason, get_wakeup_cause,
-        sleep::{RtcSleepConfig, TimerWakeupSource},
-        Rtc, SocResetReason,
-    },
+    rtc_cntl::{get_reset_reason, get_wakeup_cause, sleep::TimerWakeupSource, Rtc, SocResetReason},
     spi::{master::Spi, SpiMode},
     Cpu,
 };
@@ -140,13 +132,6 @@ fn main() -> ! {
     neopixel_and_i2c_power.set_low();
 
     // Deep sleep.
-    let mut delay = Delay::new();
-    let timer = TimerWakeupSource::new(Duration::from_secs(25));
-    println!("sleeping!");
-    delay.delay_ms(100u32);
-
-    let cfg = RtcSleepConfig::deep();
-    //cfg.set_rtc_fastmem_pd_en(false);
-    rtc.sleep(&cfg, &[&timer]);
-    panic!("We should never get here after the sleep() call.");
+    let timer = TimerWakeupSource::new(Duration::from_secs(55));
+    rtc.sleep_deep(&[&timer]);
 }
