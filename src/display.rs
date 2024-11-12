@@ -217,7 +217,7 @@ where
         let y = height - ((CRITICAL_CO2 as i32) * height) / (max_co2 as i32);
         for x in (0..width).step_by(10) {
             let _ = Line::new(Point::new(x, y), Point::new(x + 5, y))
-                .into_styled(PrimitiveStyle::with_stroke(Color::Black, 2))
+                .into_styled(PrimitiveStyle::with_stroke(Color::Black, 1))
                 .draw(&mut self.display);
         }
     }
