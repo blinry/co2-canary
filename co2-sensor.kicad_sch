@@ -8247,7 +8247,6 @@
 		(effects
 			(font
 				(size 1.27 1.27)
-				(thickness 0.254)
 			)
 			(justify right bottom)
 		)
@@ -8739,8 +8738,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 				(justify right)
 			)
@@ -8865,7 +8862,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
 				)
 			)
 		)
@@ -8874,7 +8870,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
 				)
 			)
 		)
@@ -8944,9 +8939,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(bold yes)
-					(color 0 0 0 1)
 				)
 				(justify right)
 			)
@@ -10660,8 +10652,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 				(justify left)
 			)
@@ -10671,8 +10661,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 				(justify left)
 			)
@@ -11010,8 +10998,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 			)
 		)
@@ -11078,9 +11064,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(bold yes)
-					(color 0 0 0 1)
 				)
 				(justify right)
 			)
@@ -12252,8 +12235,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 			)
 		)
@@ -12262,8 +12243,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 			)
 		)
@@ -12610,8 +12589,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 				(justify right)
 			)
@@ -13169,7 +13146,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
 				)
 			)
 		)
@@ -13178,7 +13154,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
 				)
 			)
 		)
@@ -13247,9 +13222,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(bold yes)
-					(color 0 0 0 1)
 				)
 				(justify right)
 			)
@@ -13308,8 +13280,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 			)
 		)
@@ -13318,8 +13288,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 			)
 		)
@@ -14003,8 +13971,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 			)
 		)
@@ -14013,8 +13979,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.254)
-					(color 0 0 0 1)
 				)
 			)
 		)
