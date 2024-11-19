@@ -2923,151 +2923,6 @@
 				)
 			)
 		)
-		(symbol "Diode:MBR0530"
-			(pin_numbers hide)
-			(pin_names
-				(offset 1.016) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "D"
-				(at 0 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "MBR0530"
-				(at 0 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Diode_SMD:D_SOD-123"
-				(at 0 -4.445 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "http://www.mccsemi.com/up_pdf/MBR0520~MBR0580(SOD123).pdf"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "30V 0.5A Schottky Power Rectifier Diode, SOD-123"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "diode Schottky"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "D*SOD?123*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "MBR0530_0_1"
-				(polyline
-					(pts
-						(xy 1.27 0) (xy -1.27 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "MBR0530_1_1"
-				(pin passive line
-					(at -3.81 0 0)
-					(length 2.54)
-					(name "K"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 3.81 0 180)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "Diode:MBR0540"
 			(pin_numbers hide)
 			(pin_names
@@ -3175,6 +3030,151 @@
 				)
 			)
 			(symbol "MBR0540_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "Diode:SS14"
+			(pin_numbers hide)
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "SS14"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Diode_SMD:D_SMA"
+				(at 0 -4.445 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.vishay.com/docs/88746/ss12.pdf"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "40V 1A Schottky Diode, SMA"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "diode Schottky"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "D*SMA*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "SS14_0_1"
+				(polyline
+					(pts
+						(xy 1.27 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "SS14_1_1"
 				(pin passive line
 					(at -3.81 0 0)
 					(length 2.54)
@@ -4885,7 +4885,7 @@
 				)
 			)
 		)
-		(symbol "Transistor_FET:Si1308EDL"
+		(symbol "Transistor_FET:AO3400A"
 			(pin_names hide)
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -4899,7 +4899,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "Si1308EDL"
+			(property "Value" "AO3400A"
 				(at 5.08 0 0)
 				(effects
 					(font
@@ -4908,7 +4908,7 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "Package_TO_SOT_SMD:SOT-323_SC-70"
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
 				(at 5.08 -1.905 0)
 				(effects
 					(font
@@ -4919,7 +4919,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "https://www.vishay.com/docs/63399/si1308edl.pdf"
+			(property "Datasheet" "http://www.aosmd.com/pdfs/datasheet/AO3400A.pdf"
 				(at 5.08 -3.81 0)
 				(effects
 					(font
@@ -4929,7 +4929,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "30V Vds, 1.4A Id, N-Channel MOSFET, SC-70"
+			(property "Description" "30V Vds, 5.7A Id, N-Channel MOSFET, SOT-23"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4947,7 +4947,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "SOT?323*"
+			(property "ki_fp_filters" "SOT?23*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4956,7 +4956,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Si1308EDL_0_1"
+			(symbol "AO3400A_0_1"
 				(polyline
 					(pts
 						(xy 0.254 0) (xy -2.54 0)
@@ -5123,7 +5123,7 @@
 					)
 				)
 			)
-			(symbol "Si1308EDL_1_1"
+			(symbol "AO3400A_1_1"
 				(pin input line
 					(at -5.08 0 0)
 					(length 2.54)
@@ -8248,8 +8248,6 @@
 			(font
 				(size 1.27 1.27)
 				(thickness 0.254)
-				(bold yes)
-				(color 0 0 0 1)
 			)
 			(justify right bottom)
 		)
@@ -8742,7 +8740,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 				(justify right)
@@ -8869,8 +8866,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
-					(color 0 0 0 1)
 				)
 			)
 		)
@@ -8880,8 +8875,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
-					(color 0 0 0 1)
 				)
 			)
 		)
@@ -10668,7 +10661,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 				(justify left)
@@ -10680,7 +10672,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 				(justify left)
@@ -11020,7 +11011,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 			)
@@ -12263,7 +12253,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 			)
@@ -12274,7 +12263,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 			)
@@ -12316,6 +12304,81 @@
 			(project "co2-sensor"
 				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
 					(reference "R8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Transistor_FET:AO3400A")
+		(at 243.84 57.15 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7e64e293-af8a-48f8-9c8f-5528a3970642")
+		(property "Reference" "Q2"
+			(at 249.174 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "AO3400A"
+			(at 249.174 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(at 248.92 59.055 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.aosmd.com/pdfs/datasheet/AO3400A.pdf"
+			(at 248.92 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "30V Vds, 5.7A Id, N-Channel MOSFET, SOT-23"
+			(at 243.84 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "374f0912-7290-4dbf-901d-3f77fa1ebcff")
+		)
+		(pin "1"
+			(uuid "c717c1ad-ec10-4558-ba41-18687a09ca49")
+		)
+		(pin "3"
+			(uuid "42ed0829-571a-4713-90a8-f693e8caebb7")
+		)
+		(instances
+			(project ""
+				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
+					(reference "Q2")
 					(unit 1)
 				)
 			)
@@ -12548,7 +12611,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 				(justify right)
@@ -12679,7 +12741,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "3Ω"
+		(property "Value" "2Ω"
 			(at 248.92 72.3899 0)
 			(effects
 				(font
@@ -13108,8 +13170,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
-					(color 0 0 0 1)
 				)
 			)
 		)
@@ -13119,8 +13179,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
-					(color 0 0 0 1)
 				)
 			)
 		)
@@ -13251,7 +13309,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 			)
@@ -13262,7 +13319,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 			)
@@ -13304,6 +13360,74 @@
 			(project "co2-sensor"
 				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
 					(reference "R15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:SS14")
+		(at 266.7 35.56 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "abeb2cc6-c327-467c-bb87-97fd40c3b85f")
+		(property "Reference" "D1"
+			(at 267.0175 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SS14"
+			(at 267.0175 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_SMA"
+			(at 266.7 40.005 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/88746/ss12.pdf"
+			(at 266.7 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "40V 1A Schottky Diode, SMA"
+			(at 266.7 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "7c78d60c-c841-4582-b3c2-c26e65a2b9b4")
+		)
+		(pin "1"
+			(uuid "bd6959cf-bece-4668-960d-7657dc72422f")
+		)
+		(instances
+			(project "co2-sensor"
+				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
+					(reference "D1")
 					(unit 1)
 				)
 			)
@@ -13502,81 +13626,6 @@
 			(project "co2-sensor"
 				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
 					(reference "#PWR020")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Transistor_FET:Si1308EDL")
-		(at 243.84 57.15 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "b1445876-249a-4858-a1b7-f6984c263b17")
-		(property "Reference" "Q1"
-			(at 248.92 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Si1308EDL"
-			(at 248.92 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-323_SC-70"
-			(at 248.92 59.055 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.vishay.com/docs/63399/si1308edl.pdf"
-			(at 248.92 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Description" "30V Vds, 1.4A Id, N-Channel MOSFET, SC-70"
-			(at 243.84 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "20174967-1ab5-4629-80c4-1b378526b43f")
-		)
-		(pin "1"
-			(uuid "7e2349ab-7679-48e0-af06-2167a33d5570")
-		)
-		(pin "3"
-			(uuid "1fef0ac0-74d5-48f0-b365-096e66a4b168")
-		)
-		(instances
-			(project ""
-				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
-					(reference "Q1")
 					(unit 1)
 				)
 			)
@@ -13940,73 +13989,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Diode:MBR0530")
-		(at 257.81 49.53 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "bcf1faf7-8fcb-4a36-a251-b6221651a360")
-		(property "Reference" "D3"
-			(at 257.81 43.18 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "MBR0530"
-			(at 258.1275 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 257.81 45.085 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.mccsemi.com/up_pdf/MBR0520~MBR0580(SOD123).pdf"
-			(at 257.81 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "30V 0.5A Schottky Power Rectifier Diode, SOD-123"
-			(at 257.81 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "93fed64d-01f2-40e5-b0b8-10f98fad48a5")
-		)
-		(pin "1"
-			(uuid "ec9a88f2-b503-42a6-b152-c4a4e63ed239")
-		)
-		(instances
-			(project "co2-sensor"
-				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
-					(reference "D3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 93.98 73.66 270)
 		(mirror x)
@@ -14022,7 +14004,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 			)
@@ -14033,7 +14014,6 @@
 				(font
 					(size 1.27 1.27)
 					(thickness 0.254)
-					(bold yes)
 					(color 0 0 0 1)
 				)
 			)
@@ -14149,42 +14129,33 @@
 		)
 	)
 	(symbol
-		(lib_id "Diode:MBR0530")
-		(at 266.7 35.56 180)
+		(lib_id "Diode:SS14")
+		(at 257.81 49.53 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c51b5268-03d3-411c-84ea-23e1ad2841a4")
+		(uuid "c37b69b6-a510-4884-a4de-6317f58f37de")
 		(property "Reference" "D2"
-			(at 267.0175 29.21 0)
+			(at 258.1275 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "MBR0530"
-			(at 267.0175 31.75 0)
+		(property "Value" "SS14"
+			(at 258.1275 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 266.7 31.115 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.mccsemi.com/up_pdf/MBR0520~MBR0580(SOD123).pdf"
-			(at 266.7 35.56 0)
+		(property "Footprint" "Diode_SMD:D_SMA"
+			(at 257.81 53.975 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14192,8 +14163,17 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "30V 0.5A Schottky Power Rectifier Diode, SOD-123"
-			(at 266.7 35.56 0)
+		(property "Datasheet" "https://www.vishay.com/docs/88746/ss12.pdf"
+			(at 257.81 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "40V 1A Schottky Diode, SMA"
+			(at 257.81 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14202,10 +14182,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "7f1c6171-7477-4641-80e8-f6a5e97f0931")
+			(uuid "6220cdd1-4c6e-47bb-a1c9-1b397ce3f077")
 		)
 		(pin "1"
-			(uuid "d2796489-30f6-4ed6-aa37-00d88c76a869")
+			(uuid "ac369327-fd39-46e3-a171-38145fc2d014")
 		)
 		(instances
 			(project "co2-sensor"
@@ -14412,74 +14392,6 @@
 			(project "co2-sensor"
 				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
 					(reference "#PWR044")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Diode:MBR0530")
-		(at 266.7 24.13 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "cbc4d56d-97bf-4e21-a3f6-631d8a06a8c5")
-		(property "Reference" "D1"
-			(at 266.3825 17.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "MBR0530"
-			(at 266.3825 20.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 266.7 28.575 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.mccsemi.com/up_pdf/MBR0520~MBR0580(SOD123).pdf"
-			(at 266.7 24.13 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "30V 0.5A Schottky Power Rectifier Diode, SOD-123"
-			(at 266.7 24.13 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "3455acf2-b1c0-462b-ab5c-8aa09eeb484a")
-		)
-		(pin "1"
-			(uuid "9f900fd9-a9ee-4786-885f-7a81285169d6")
-		)
-		(instances
-			(project ""
-				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
-					(reference "D1")
 					(unit 1)
 				)
 			)
@@ -15016,6 +14928,73 @@
 			(project "co2-sensor"
 				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
 					(reference "SW1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:SS14")
+		(at 266.7 24.13 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "eb34c31d-2fdd-4ede-827f-0b1f1a0efc0f")
+		(property "Reference" "D6"
+			(at 266.3825 17.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SS14"
+			(at 266.3825 20.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_SMA"
+			(at 266.7 28.575 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/88746/ss12.pdf"
+			(at 266.7 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "40V 1A Schottky Diode, SMA"
+			(at 266.7 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "71a404c6-9fdf-4737-b7fe-7038e3d6c300")
+		)
+		(pin "1"
+			(uuid "52703233-4695-479d-92db-2f5a5fe95e7d")
+		)
+		(instances
+			(project ""
+				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
+					(reference "D6")
 					(unit 1)
 				)
 			)
