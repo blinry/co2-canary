@@ -6,7 +6,7 @@
 	(paper "A4")
 	(title_block
 		(title "Low-Power CO2 Sensor")
-		(date "2024-11-01")
+		(date "2024-11-21")
 		(company "blinry <mail@blinry.org>")
 	)
 	(lib_symbols
@@ -8055,7 +8055,7 @@
 		)
 		(uuid "8d80e636-febb-40ab-bcfe-6d6a7f856e23")
 	)
-	(text "Re-use caps I already use?"
+	(text "Re-use caps sizes already use?"
 		(exclude_from_sim no)
 		(at 126.492 22.098 0)
 		(effects
@@ -8066,18 +8066,6 @@
 			)
 		)
 		(uuid "99eee203-84cf-4065-a751-266b35c66f38")
-	)
-	(text "10uF?"
-		(exclude_from_sim no)
-		(at 16.51 132.08 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(italic yes)
-				(color 255 0 0 1)
-			)
-		)
-		(uuid "a749f93c-b9d1-4e9e-8235-8835bd08d7ad")
 	)
 	(text "Reference circuit from\nhttps://files.waveshare.com/upload\n/e/e5/1.54inch_e-paper_V2_Datasheet.pdf"
 		(exclude_from_sim no)
@@ -8091,18 +8079,6 @@
 			(justify left)
 		)
 		(uuid "ac39f5c1-0911-4ced-abe3-2234343bd1af")
-	)
-	(text "Good value/\npackage?"
-		(exclude_from_sim no)
-		(at 46.482 156.464 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(italic yes)
-				(color 255 0 0 1)
-			)
-		)
-		(uuid "e41b687c-1c33-4a04-8769-c1902dfad54d")
 	)
 	(label "BTN2"
 		(at 143.51 128.27 0)
@@ -9390,7 +9366,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SMA"
+		(property "Footprint" "Diode_SMD:D_SOD-123"
 			(at 27.94 99.695 0)
 			(effects
 				(font
@@ -9417,7 +9393,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part" "C2480"
+		(property "LCSC Part" "C8598"
 			(at 27.94 104.14 0)
 			(effects
 				(font
@@ -10020,6 +9996,15 @@
 			)
 		)
 		(property "Sim.Type" ""
+			(at 143.51 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLCPCB Position Offset" "0,-2.667"
 			(at 143.51 73.66 0)
 			(effects
 				(font
@@ -12172,6 +12157,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 71.12 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "6ef31021-786c-4984-8aa0-49a043650a84")
 		)
@@ -12542,6 +12536,15 @@
 			)
 		)
 		(property "Sim.Type" ""
+			(at 30.48 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLCPCB Position Offset" "0,1.3335"
 			(at 30.48 44.45 0)
 			(effects
 				(font
@@ -13220,7 +13223,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "24P FPC Connector"
+		(property "Value" "24-pin FPC Connector"
 			(at 273.558 144.526 90)
 			(effects
 				(font
@@ -13284,6 +13287,15 @@
 			)
 		)
 		(property "LCSC Part" "C262567"
+			(at 262.89 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLCPCB Position Offset" "0,0.381"
 			(at 262.89 113.03 0)
 			(effects
 				(font
@@ -13943,6 +13955,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLCPCB Rotation Offset" "90"
+			(at 55.88 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "9ca02985-da01-4a53-a7bb-98541e7dd805")
 		)
@@ -14565,7 +14586,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SMA"
+		(property "Footprint" "Diode_SMD:D_SOD-123"
 			(at 266.7 40.005 0)
 			(effects
 				(font
@@ -14592,7 +14613,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part" "C2480"
+		(property "LCSC Part" "C8598"
 			(at 266.7 35.56 0)
 			(effects
 				(font
@@ -15309,6 +15330,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLCPCB Rotation Offset" "90"
+			(at 36.83 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "f7585132-0fb9-4eaf-8f4c-830d3d8b2bb4")
 		)
@@ -15567,7 +15597,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SMA"
+		(property "Footprint" "Diode_SMD:D_SOD-123"
 			(at 257.81 53.975 0)
 			(effects
 				(font
@@ -15594,7 +15624,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part" "C2480"
+		(property "LCSC Part" "C8598"
 			(at 257.81 49.53 0)
 			(effects
 				(font
@@ -16587,7 +16617,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SMA"
+		(property "Footprint" "Diode_SMD:D_SOD-123"
 			(at 266.7 28.575 0)
 			(effects
 				(font
@@ -16614,7 +16644,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part" "C2480"
+		(property "LCSC Part" "C8598"
 			(at 266.7 24.13 0)
 			(effects
 				(font
