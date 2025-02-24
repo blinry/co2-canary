@@ -1031,8 +1031,8 @@
 					(justify left)
 				)
 			)
-			(property "Value" "Waveshare E-Ink"
-				(at 10.414 -26.162 90)
+			(property "Value" "24-pin FPC Connector"
+				(at 10.668 -31.496 90)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1040,7 +1040,7 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "Connector_FFC-FPC:TE_2-1734839-4_1x24-1MP_P0.5mm_Horizontal"
+			(property "Footprint" "Connector_FFC-FPC:Jushuo_AFC07-S24FCA-00_1x24-1MP_P0.50_Horizontal"
 				(at 43.942 7.366 0)
 				(effects
 					(font
@@ -1060,6 +1060,51 @@
 			)
 			(property "Description" "Generic connector, single row, 01x24, script generated (kicad-library-utils/schlib/autogen/connector/)"
 				(at 61.722 4.826 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Sim.Device" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Sim.Pins" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Sim.Type" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "LCSC Part" "C262567"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "JLCPCB Position Offset" "0,0.381"
+				(at 0 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1763,7 +1808,7 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin unspecified line
 					(at -5.08 -15.24 0)
 					(length 3.81)
 					(name "Pin_18"
@@ -6734,16 +6779,6 @@
 	)
 	(wire
 		(pts
-			(xy 24.13 104.14) (xy 20.32 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4fd242af-9a25-4593-8cb2-df46238327ba")
-	)
-	(wire
-		(pts
 			(xy 123.19 128.27) (xy 127 128.27)
 		)
 		(stroke
@@ -6781,16 +6816,6 @@
 			(type default)
 		)
 		(uuid "54f9107c-42a6-40ed-8c3d-7c5e75ccc52a")
-	)
-	(wire
-		(pts
-			(xy 38.1 104.14) (xy 34.29 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "55cbe541-9911-4a0d-927a-dd6bd753313a")
 	)
 	(wire
 		(pts
@@ -6911,16 +6936,6 @@
 			(type default)
 		)
 		(uuid "67f73104-6918-406e-bf6c-c6bec8256856")
-	)
-	(wire
-		(pts
-			(xy 34.29 104.14) (xy 31.75 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "692ee9ca-d715-4748-87b7-6ca819734a8a")
 	)
 	(wire
 		(pts
@@ -7114,6 +7129,16 @@
 	)
 	(wire
 		(pts
+			(xy 34.29 104.14) (xy 38.1 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "86d02fb9-7af4-41b1-8f95-0c62806fe5f1")
+	)
+	(wire
+		(pts
 			(xy 50.8 25.4) (xy 50.8 29.21)
 		)
 		(stroke
@@ -7181,6 +7206,16 @@
 			(type default)
 		)
 		(uuid "8f4546d5-898b-4851-9cd5-ddd0098e4cde")
+	)
+	(wire
+		(pts
+			(xy 31.75 104.14) (xy 34.29 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "90015a57-715f-4c23-b4d6-358a08090376")
 	)
 	(wire
 		(pts
@@ -7361,6 +7396,16 @@
 			(type default)
 		)
 		(uuid "b49a6dc4-165e-4ad3-8bd2-20d0b570854c")
+	)
+	(wire
+		(pts
+			(xy 20.32 104.14) (xy 24.13 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b5c8f103-a21d-41c4-86f6-71ef3e447f9c")
 	)
 	(wire
 		(pts
@@ -9157,7 +9202,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
+		(property "Footprint" "footprints:TS24CA"
 			(at 195.58 63.5 0)
 			(effects
 				(font
@@ -9263,7 +9308,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
+		(property "Footprint" "footprints:TS24CA"
 			(at 118.11 137.16 0)
 			(effects
 				(font
@@ -9336,109 +9381,6 @@
 			(project "co2-sensor"
 				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
 					(reference "SW3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Diode:MBR0540")
-		(at 27.94 104.14 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "1f0d70bf-6897-4305-ac10-42b749e68542")
-		(property "Reference" "D4"
-			(at 27.94 99.314 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SS14"
-			(at 27.94 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 27.94 99.695 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.vishay.com/docs/88746/ss12.pdf"
-			(at 27.94 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "40V 0.5A Schottky Power Rectifier Diode, SOD-123"
-			(at 27.94 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC Part" "C8598"
-			(at 27.94 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 27.94 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 27.94 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 27.94 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "1402f7d1-66c1-463a-b640-9dc49cf35940")
-		)
-		(pin "1"
-			(uuid "c8c1e8a3-6f06-4343-996b-1bf09347b25b")
-		)
-		(instances
-			(project ""
-				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
-					(reference "D4")
 					(unit 1)
 				)
 			)
@@ -11089,7 +11031,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
+		(property "Footprint" "footprints:TS24CA"
 			(at 152.4 137.16 0)
 			(effects
 				(font
@@ -11162,6 +11104,109 @@
 			(project "co2-sensor"
 				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
 					(reference "SW5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:MBR0540")
+		(at 27.94 104.14 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "447ac70f-04f7-4f58-88f4-93a1f60f50f4")
+		(property "Reference" "D3"
+			(at 27.94 98.806 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "B5819W"
+			(at 27.94 101.092 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_SOD-123"
+			(at 27.94 99.695 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 27.94 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "40V 0.5A Schottky Power Rectifier Diode, SOD-123"
+			(at 27.94 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part" "C8598"
+			(at 27.94 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 27.94 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 27.94 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 27.94 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "de5f6912-4354-4739-a74d-d9292477ddd5")
+		)
+		(pin "1"
+			(uuid "5be1097f-4d75-4015-823a-1467eedc41e2")
+		)
+		(instances
+			(project "co2-sensor"
+				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
+					(reference "D3")
 					(unit 1)
 				)
 			)
@@ -13286,7 +13331,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part" "C262567"
+		(property "LCSC Part" "C262643"
 			(at 262.89 113.03 0)
 			(effects
 				(font
@@ -14578,7 +14623,7 @@
 				)
 			)
 		)
-		(property "Value" "SS14"
+		(property "Value" "B5819W"
 			(at 267.0175 31.75 0)
 			(effects
 				(font
@@ -14595,7 +14640,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.vishay.com/docs/88746/ss12.pdf"
+		(property "Datasheet" "~"
 			(at 266.7 35.56 0)
 			(effects
 				(font
@@ -15589,7 +15634,7 @@
 				)
 			)
 		)
-		(property "Value" "SS14"
+		(property "Value" "B5819W"
 			(at 258.1275 45.72 0)
 			(effects
 				(font
@@ -15606,7 +15651,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.vishay.com/docs/88746/ss12.pdf"
+		(property "Datasheet" "~"
 			(at 257.81 49.53 0)
 			(effects
 				(font
@@ -15769,7 +15814,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
+		(property "Footprint" "footprints:TS24CA"
 			(at 134.62 137.16 0)
 			(effects
 				(font
@@ -16514,7 +16559,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
+		(property "Footprint" "footprints:TS24CA"
 			(at 83.82 50.8 0)
 			(effects
 				(font
@@ -16609,7 +16654,7 @@
 				)
 			)
 		)
-		(property "Value" "SS14"
+		(property "Value" "B5819W"
 			(at 266.3825 20.32 0)
 			(effects
 				(font
@@ -16626,7 +16671,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.vishay.com/docs/88746/ss12.pdf"
+		(property "Datasheet" "~"
 			(at 266.7 24.13 0)
 			(effects
 				(font
