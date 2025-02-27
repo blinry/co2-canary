@@ -16,12 +16,12 @@ use embedded_hal_bus::spi::ExclusiveDevice;
 use esp_backtrace as _;
 use esp_hal::{
     delay::Delay,
-    gpio::{Input, Level, Output, Pull},
+    gpio::{Input, InputConfig, Level, Output, OutputConfig, Pull},
     i2c::master::{Config as I2cConfig, I2c},
     ram,
     rtc_cntl::{sleep::TimerWakeupSource, Rtc},
     spi::master::{Config as SpiConfig, Spi},
-    time::{self, RateExtU32},
+    time::{Instant, Rate},
 };
 use esp_println::println;
 
@@ -36,27 +36,28 @@ static mut LAST_DISPLAYED_CO2: u16 = 0;
 
 #[esp_hal::main]
 fn main() -> ! {
-    let wakeup_time = time::now();
+    let wakeup_time = Instant::now();
 
     let peripherals = esp_hal::init(esp_hal::Config::default());
     let mut delay = Delay::new();
     let mut rtc = Rtc::new(peripherals.LPWR);
 
-    let mut neopixel_and_i2c_power = Output::new(peripherals.GPIO20, Level::Low);
+    let mut neopixel_and_i2c_power =
+        Output::new(peripherals.GPIO20, Level::Low, OutputConfig::default());
 
     let mut temperature = 0.0;
 
     // Required for I2C to work!
     neopixel_and_i2c_power.set_high();
 
-    let i2c_config = I2cConfig::default().with_frequency(100u32.kHz());
+    let i2c_config = I2cConfig::default().with_frequency(Rate::from_khz(100));
     let i2c = I2c::new(peripherals.I2C0, i2c_config)
         .expect("Should be able to configure I2C peripheral")
         .with_sda(peripherals.GPIO19)
         .with_scl(peripherals.GPIO18);
 
     if true {
-        let co2_enable = Output::new(peripherals.GPIO3, Level::High);
+        let co2_enable = Output::new(peripherals.GPIO3, Level::High, OutputConfig::default());
 
         let number_of_samples = 2;
         let mut co2_sensor = SunriseSensor::new(i2c, co2_enable, &mut delay);
@@ -88,7 +89,7 @@ fn main() -> ! {
                     HISTORY.add_measurement(0);
                 }
             }
-            CALIBRATION_DATA.update_time_ms(rtc.time_since_boot().ticks() / 1000);
+            CALIBRATION_DATA.update_time_ms(rtc.time_since_boot().as_millis());
             println!("{:?}", CALIBRATION_DATA);
         }
 
@@ -118,10 +119,13 @@ fn main() -> ! {
             .with_mosi(peripherals.GPIO22)
             .with_miso(peripherals.GPIO23);
 
-        let cs = Output::new(peripherals.GPIO7, Level::High); // chip select
-        let busy_in = Input::new(peripherals.GPIO5, Pull::Down);
-        let dc = Output::new(peripherals.GPIO8, Level::Low); // data/command
-        let rst = Output::new(peripherals.GPIO1, Level::Low);
+        let cs = Output::new(peripherals.GPIO7, Level::High, OutputConfig::default()); // chip select
+        let busy_in = Input::new(
+            peripherals.GPIO5,
+            InputConfig::default().with_pull(Pull::Down),
+        );
+        let dc = Output::new(peripherals.GPIO8, Level::Low, OutputConfig::default()); // data/command
+        let rst = Output::new(peripherals.GPIO1, Level::Low, OutputConfig::default());
 
         let exclusive_spi = ExclusiveDevice::new(&mut spi, cs, &mut delay)
             .expect("Failed to get exclusive SPI device");
@@ -143,9 +147,9 @@ fn main() -> ! {
 
     // Deep sleep.
     let wakeup_interval = Duration::from_secs(30);
-    let awake_duration = time::now() - wakeup_time;
+    let awake_duration = Instant::now() - wakeup_time;
     // (Convert to std Duration.)
-    let awake_duration = Duration::from_millis(awake_duration.to_millis() as u64);
+    let awake_duration = Duration::from_millis(awake_duration.as_millis());
     let remaining_time = wakeup_interval - awake_duration;
     let timer = TimerWakeupSource::new(remaining_time);
     rtc.sleep_deep(&[&timer]);
