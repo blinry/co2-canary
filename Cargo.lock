@@ -101,7 +101,7 @@ dependencies = [
  "esp-println",
  "heapless",
  "itertools",
- "max17048",
+ "max170xx",
  "u8g2-fonts",
 ]
 
@@ -669,11 +669,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "30bde2b3dc3671ae49d8e2e9f044c7c005836e7a023ee57cffa25ab82764bb9e"
 
 [[package]]
-name = "max17048"
-version = "0.1.0"
-source = "git+https://github.com/MabezDev/max17048?rev=refs%2Fpull%2F1%2Fhead#4dd3c5ca13e90b17d5927ce7df9a1902cccca740"
+name = "max170xx"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e36315dcf3785ab2b2806a1654e0b23c63e937b8c57a1a610098f2683da89366"
 dependencies = [
- "embedded-hal 0.2.7",
+ "embedded-hal 1.0.0",
 ]
 
 [[package]]

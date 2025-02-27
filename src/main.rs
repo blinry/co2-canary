@@ -51,7 +51,7 @@ fn main() -> ! {
     neopixel_and_i2c_power.set_high();
 
     let i2c_config = I2cConfig::default().with_frequency(Rate::from_khz(100));
-    let i2c = I2c::new(peripherals.I2C0, i2c_config)
+    let mut i2c = I2c::new(peripherals.I2C0, i2c_config)
         .expect("Should be able to configure I2C peripheral")
         .with_sda(peripherals.GPIO19)
         .with_scl(peripherals.GPIO18);
@@ -96,16 +96,10 @@ fn main() -> ! {
         temperature = co2_sensor.get_temperature().unwrap();
 
         co2_sensor.turn_off();
-        _ = co2_sensor.release();
+        i2c = co2_sensor.release();
     }
 
-    // TODO: Fork the max17048 crate and update its embedded_hal to 1.0.
-    let battery_percent = None;
-    /*
-       let battery_percent = {
-        let mut battery = max17048::Max17048::new(i2c, 0x36);
-        battery.soc().ok().map(|x| x as f32)
-    };*/
+    let battery_percent = max170xx::Max17048::new(i2c).soc().ok();
 
     // Refresh the display if the CO2 value has changed by more than a certain amount.
     let refresh_threshold = 50; // ppm

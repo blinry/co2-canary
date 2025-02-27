@@ -16,7 +16,7 @@ embedded-hal-bus = "0.3.0"
 u8g2-fonts = "0.5.2"
 embedded-hal = "1.0.0"
 itertools = { version = "0.14.0", default-features = false }
-max17048 = { git = "https://github.com/MabezDev/max17048", rev = "refs/pull/1/head" }
+max170xx = "1.0.0"
 
 #[features]
 #default = ["esp-hal/xtal-40mhz"]
