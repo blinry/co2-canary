@@ -1,5 +1,7 @@
 #![no_std]
 #![no_main]
+// Allow this for now, to be able to use ram(rtc_fast).
+#![allow(static_mut_refs)]
 
 mod display;
 mod history;
@@ -15,11 +17,11 @@ use esp_backtrace as _;
 use esp_hal::{
     delay::Delay,
     entry,
-    gpio::{Input, Io, Level, NoPin, Output, Pull},
-    i2c::I2c,
+    gpio::{Input, Level, Output, Pull},
+    i2c::master::{Config as I2cConfig, I2c},
     prelude::*,
     rtc_cntl::{sleep::TimerWakeupSource, Rtc},
-    spi::{master::Spi, SpiMode},
+    spi::master::Spi,
     time,
 };
 use esp_println::println;
@@ -39,22 +41,25 @@ fn main() -> ! {
 
     let peripherals = esp_hal::init(esp_hal::Config::default());
     let mut delay = Delay::new();
-    let io = Io::new(peripherals.GPIO, peripherals.IO_MUX);
     let mut rtc = Rtc::new(peripherals.LPWR);
 
-    let mut neopixel_and_i2c_power = Output::new(io.pins.gpio20, Level::Low);
+    let mut neopixel_and_i2c_power = Output::new(peripherals.GPIO20, Level::Low);
 
     let mut temperature = 0.0;
 
     // Required for I2C to work!
     neopixel_and_i2c_power.set_high();
 
-    let sda = io.pins.gpio19;
-    let scl = io.pins.gpio18;
-    let mut i2c = I2c::new(peripherals.I2C0, sda, scl, 100.kHz());
+    let i2c_config = I2cConfig {
+        frequency: 100.kHz(),
+        ..Default::default()
+    };
+    let mut i2c = I2c::new(peripherals.I2C0, i2c_config)
+        .with_sda(peripherals.GPIO19)
+        .with_scl(peripherals.GPIO18);
 
     if true {
-        let co2_enable = Output::new(io.pins.gpio3, Level::High);
+        let co2_enable = Output::new(peripherals.GPIO3, Level::High);
 
         let number_of_samples = 2;
         let mut co2_sensor = SunriseSensor::new(i2c, co2_enable, &mut delay);
@@ -107,17 +112,15 @@ fn main() -> ! {
         unsafe { HISTORY.recent().unwrap_or(0).abs_diff(LAST_DISPLAYED_CO2) >= refresh_threshold };
 
     if refresh_display {
-        let sck = io.pins.gpio21;
-        let mosi = io.pins.gpio22;
-        let miso = io.pins.gpio23;
+        let mut spi = Spi::new(peripherals.SPI2)
+            .with_sck(peripherals.GPIO21)
+            .with_mosi(peripherals.GPIO22)
+            .with_miso(peripherals.GPIO23);
 
-        let mut spi = Spi::new(peripherals.SPI2, 16u32.MHz(), SpiMode::Mode0)
-            .with_pins(sck, mosi, miso, NoPin);
-
-        let cs = Output::new(io.pins.gpio7, Level::High); // chip select
-        let busy_in = Input::new(io.pins.gpio5, Pull::Down);
-        let dc = Output::new(io.pins.gpio8, Level::Low); // data/command
-        let rst = Output::new(io.pins.gpio1, Level::Low);
+        let cs = Output::new(peripherals.GPIO7, Level::High); // chip select
+        let busy_in = Input::new(peripherals.GPIO5, Pull::Down);
+        let dc = Output::new(peripherals.GPIO8, Level::Low); // data/command
+        let rst = Output::new(peripherals.GPIO1, Level::Low);
 
         let exclusive_spi = ExclusiveDevice::new(&mut spi, cs, &mut delay)
             .expect("Failed to get exclusive SPI device");

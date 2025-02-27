@@ -6,7 +6,7 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-esp-hal = { version = "0.21.1", features = ["esp32c6"] }
+esp-hal = { version = "0.22", features = ["esp32c6"] }
 esp-backtrace = { version = "0.14.0", features = [
     "println",
     "esp32c6",
