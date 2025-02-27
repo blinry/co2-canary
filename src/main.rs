@@ -69,9 +69,9 @@ fn main() -> ! {
         }
 
         // TODO: I can probably lower this?
-        let milliseconds_per_sample = 300;
+        let milliseconds_per_sample = 300u64;
         let timer = TimerWakeupSource::new(Duration::from_millis(
-            (number_of_samples * milliseconds_per_sample) as u64,
+            (number_of_samples as u64) * milliseconds_per_sample,
         ));
         rtc.sleep_light(&[&timer]);
 
@@ -96,7 +96,7 @@ fn main() -> ! {
         i2c = co2_sensor.release();
     }
 
-    let battery_voltage = {
+    let battery_percent = {
         let mut battery = max17048::Max17048::new(i2c, 0x36);
         battery.soc().ok().map(|x| x as f32)
     };
@@ -127,7 +127,7 @@ fn main() -> ! {
 
         unsafe {
             display
-                .draw(&HISTORY, temperature, battery_voltage)
+                .draw(&HISTORY, temperature, battery_percent)
                 .expect("Failed to draw to the display");
             LAST_DISPLAYED_CO2 = HISTORY.recent().unwrap_or(0);
         }

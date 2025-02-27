@@ -78,8 +78,8 @@ where
 
         self.draw_temperature(temperature);
 
-        if let Some(battery_voltage) = battery_percent {
-            self.draw_battery(battery_voltage);
+        if let Some(battery_percent) = battery_percent {
+            self.draw_battery(battery_percent);
         }
 
         if let Some(latest_co2) = history.recent() {
