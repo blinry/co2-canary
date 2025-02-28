@@ -1,0 +1,36 @@
+[package]
+name = "co2-sensor"
+version = "0.1.0"
+authors = ["blinry <mail@blinry.org>"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+esp-hal = { version = "1.0.0-beta.0", features = ["esp32c6", "unstable"] }
+esp-backtrace = { version = "0.15.1", features = ["println", "esp32c6", "panic-handler", "exception-handler"] }
+esp-println = { version = "0.13.1", features = ["esp32c6"] }
+epd-waveshare = "0.6.0"
+embedded-graphics = "0.8.0"
+heapless = "0.8.0"
+embedded-hal-bus = "0.3.0"
+u8g2-fonts = "0.5.2"
+embedded-hal = "1.0.0"
+itertools = { version = "0.14.0", default-features = false }
+max170xx = "1.0.0"
+
+#[features]
+#default = ["esp-hal/xtal-40mhz"]
+
+[profile.dev]
+# Rust debug is too slow.
+# For debug builds always builds with some optimization
+opt-level = "s"
+
+[profile.release]
+codegen-units = 1        # LLVM can perform better optimizations using a single thread
+debug = 2
+debug-assertions = false
+incremental = false
+lto = 'fat'
+opt-level = 's'
+overflow-checks = false
