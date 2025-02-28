@@ -12040,7 +12040,7 @@
 		(at 95.25 130.81 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -13696,7 +13696,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
 			(at 29.21 132.08 0)
 			(effects
 				(font
@@ -13932,7 +13932,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLCPCB Position Offset" "0,0.381"
+		(property "JLCPCB Position Offset" "0,0.6985"
 			(at 262.89 113.03 0)
 			(effects
 				(font
