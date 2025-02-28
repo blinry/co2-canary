@@ -3258,6 +3258,198 @@
 				)
 			)
 		)
+		(symbol "Jumper:SolderJumper_2_Bridged"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim yes)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "JP"
+				(at 0 2.032 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "SolderJumper_2_Bridged"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Solder Jumper, 2-pole, closed/bridged"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "solder jumper SPST"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "SolderJumper*Bridged*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "SolderJumper_2_Bridged_0_1"
+				(rectangle
+					(start -0.508 0.508)
+					(end 0.508 -0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(arc
+					(start -0.254 1.016)
+					(mid -1.2656 0)
+					(end -0.254 -1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start -0.254 1.016)
+					(mid -1.2656 0)
+					(end -0.254 -1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.254 1.016) (xy -0.254 -1.016)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.254 1.016) (xy 0.254 -1.016)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0.254 -1.016)
+					(mid 1.2656 0)
+					(end 0.254 1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0.254 -1.016)
+					(mid 1.2656 0)
+					(end 0.254 1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+			)
+			(symbol "SolderJumper_2_Bridged_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Mechanical:MountingHole"
 			(pin_names
 				(offset 1.016)
@@ -7171,6 +7363,16 @@
 	)
 	(wire
 		(pts
+			(xy 86.36 133.35) (xy 90.17 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "82d91cee-414d-4fc6-bde1-43c54791cac8")
+	)
+	(wire
+		(pts
 			(xy 110.49 58.42) (xy 115.57 58.42)
 		)
 		(stroke
@@ -7421,7 +7623,7 @@
 	)
 	(wire
 		(pts
-			(xy 21.59 132.08) (xy 36.83 132.08)
+			(xy 21.59 132.08) (xy 25.4 132.08)
 		)
 		(stroke
 			(width 0)
@@ -7458,6 +7660,16 @@
 			(type default)
 		)
 		(uuid "ac705e0e-2e4d-49a1-9089-f6f40de7adc1")
+	)
+	(wire
+		(pts
+			(xy 86.36 130.81) (xy 90.17 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b21847f3-c13b-4690-beb0-3007423ff644")
 	)
 	(wire
 		(pts
@@ -7988,6 +8200,16 @@
 			(type default)
 		)
 		(uuid "fbaea072-2bc1-4869-9234-2166208bda97")
+	)
+	(wire
+		(pts
+			(xy 33.02 132.08) (xy 36.83 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fbbf4c81-55cc-4da2-9886-0be7900dc149")
 	)
 	(text_box "Fuel gauge"
 		(exclude_from_sim no)
@@ -10977,7 +11199,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 190.5 133.35 0)
+		(at 189.23 137.16 0)
 		(unit 1)
 		(exclude_from_sim yes)
 		(in_bom no)
@@ -10986,7 +11208,7 @@
 		(fields_autoplaced yes)
 		(uuid "41f1213b-4eb6-42b9-8e8d-c8b1485eb092")
 		(property "Reference" "H2"
-			(at 193.04 132.0799 0)
+			(at 191.77 135.8899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10995,7 +11217,7 @@
 			)
 		)
 		(property "Value" "MountingHole"
-			(at 193.04 134.6199 0)
+			(at 191.77 138.4299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11004,7 +11226,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2"
-			(at 190.5 133.35 0)
+			(at 189.23 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11013,7 +11235,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 190.5 133.35 0)
+			(at 189.23 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11022,7 +11244,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 190.5 133.35 0)
+			(at 189.23 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11447,6 +11669,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+BATT")
+		(at 86.36 130.81 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "47d2b587-1ef2-4e18-b839-5cc08e6edde6")
+		(property "Reference" "#PWR029"
+			(at 86.36 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+BATT"
+			(at 86.36 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 86.36 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 86.36 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+BATT\""
+			(at 86.36 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ef8f6194-e574-4079-ab00-7120b7b74f47")
+		)
+		(instances
+			(project "co2-sensor"
+				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
+					(reference "#PWR029")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3.3V")
 		(at 85.09 68.58 0)
 		(unit 1)
@@ -11748,6 +12036,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 95.25 130.81 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4df730d4-4586-4649-bb67-1f2150077499")
+		(property "Reference" "J4"
+			(at 97.79 130.8099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_02x01"
+			(at 97.79 133.3499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+			(at 95.25 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 95.25 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 95.25 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "97a991e0-8884-4907-927e-cc038cc37d16")
+		)
+		(pin "2"
+			(uuid "858871c8-a2a7-4d77-9185-3914853269c6")
+		)
+		(instances
+			(project ""
+				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
+					(reference "J4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 17.78 149.86 0)
 		(unit 1)
@@ -11815,7 +12173,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 190.5 143.51 0)
+		(at 189.23 147.32 0)
 		(unit 1)
 		(exclude_from_sim yes)
 		(in_bom no)
@@ -11824,7 +12182,7 @@
 		(fields_autoplaced yes)
 		(uuid "4f20b8a4-9e00-4dc5-8ff3-059e78929273")
 		(property "Reference" "H3"
-			(at 193.04 142.2399 0)
+			(at 191.77 146.0499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11833,7 +12191,7 @@
 			)
 		)
 		(property "Value" "MountingHole"
-			(at 193.04 144.7799 0)
+			(at 191.77 148.5899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11842,7 +12200,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2"
-			(at 190.5 143.51 0)
+			(at 189.23 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11851,7 +12209,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 190.5 143.51 0)
+			(at 189.23 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11860,7 +12218,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 190.5 143.51 0)
+			(at 189.23 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13313,6 +13671,74 @@
 		)
 	)
 	(symbol
+		(lib_id "Jumper:SolderJumper_2_Bridged")
+		(at 29.21 132.08 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "810b9bd7-0010-431a-bed1-715c0e84ac66")
+		(property "Reference" "JP1"
+			(at 29.21 129.286 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SolderJumper_2_Bridged"
+			(at 41.91 129.032 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 29.21 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 29.21 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Solder Jumper, 2-pole, closed/bridged"
+			(at 29.21 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "4c32f57f-82a0-4c63-a755-690a2d37ae4a")
+		)
+		(pin "1"
+			(uuid "d2d1c3a0-fc30-4a7d-8c4a-598aaf27a7b5")
+		)
+		(instances
+			(project ""
+				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
+					(reference "JP1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:L")
 		(at 233.68 49.53 90)
 		(unit 1)
@@ -13872,6 +14298,73 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 86.36 133.35 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8ae73942-0670-46c1-9ff0-07dea04a6c60")
+		(property "Reference" "#PWR030"
+			(at 86.36 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 86.3601 137.16 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 86.36 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 86.36 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 86.36 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "68215a41-1c39-4d98-a692-9be8277b69b3")
+		)
+		(instances
+			(project "co2-sensor"
+				(path "/14a75f0f-668c-4fbd-ad64-ed80bbf70e47"
+					(reference "#PWR030")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 231.14 95.25 90)
 		(unit 1)
@@ -14201,7 +14694,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 190.5 123.19 0)
+		(at 189.23 127 0)
 		(unit 1)
 		(exclude_from_sim yes)
 		(in_bom no)
@@ -14210,7 +14703,7 @@
 		(fields_autoplaced yes)
 		(uuid "9433f037-3cd3-4025-8955-b3b658fc31a8")
 		(property "Reference" "H1"
-			(at 193.04 121.9199 0)
+			(at 191.77 125.7299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14219,7 +14712,7 @@
 			)
 		)
 		(property "Value" "MountingHole"
-			(at 193.04 124.4599 0)
+			(at 191.77 128.2699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14228,7 +14721,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2"
-			(at 190.5 123.19 0)
+			(at 189.23 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14237,7 +14730,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 190.5 123.19 0)
+			(at 189.23 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14246,7 +14739,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 190.5 123.19 0)
+			(at 189.23 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
