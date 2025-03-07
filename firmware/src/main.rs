@@ -42,22 +42,16 @@ fn main() -> ! {
     let mut delay = Delay::new();
     let mut rtc = Rtc::new(peripherals.LPWR);
 
-    let mut neopixel_and_i2c_power =
-        Output::new(peripherals.GPIO20, Level::Low, OutputConfig::default());
-
     let mut temperature = 0.0;
-
-    // Required for I2C to work!
-    neopixel_and_i2c_power.set_high();
 
     let i2c_config = I2cConfig::default().with_frequency(Rate::from_khz(100));
     let mut i2c = I2c::new(peripherals.I2C0, i2c_config)
         .expect("Should be able to configure I2C peripheral")
-        .with_sda(peripherals.GPIO19)
-        .with_scl(peripherals.GPIO18);
+        .with_sda(peripherals.GPIO6)
+        .with_scl(peripherals.GPIO7);
 
-    if true {
-        let co2_enable = Output::new(peripherals.GPIO3, Level::High, OutputConfig::default());
+    if false {
+        let co2_enable = Output::new(peripherals.GPIO4, Level::High, OutputConfig::default());
 
         let number_of_samples = 2;
         let mut co2_sensor = SunriseSensor::new(i2c, co2_enable, &mut delay);
@@ -106,20 +100,19 @@ fn main() -> ! {
     let refresh_display =
         unsafe { HISTORY.recent().unwrap_or(0).abs_diff(LAST_DISPLAYED_CO2) >= refresh_threshold };
 
-    if refresh_display {
+    if true {
         let mut spi = Spi::new(peripherals.SPI2, SpiConfig::default())
             .expect("Should be able to configure SPI device")
-            .with_sck(peripherals.GPIO21)
-            .with_mosi(peripherals.GPIO22)
-            .with_miso(peripherals.GPIO23);
+            .with_sck(peripherals.GPIO20)
+            .with_mosi(peripherals.GPIO21);
 
-        let cs = Output::new(peripherals.GPIO7, Level::High, OutputConfig::default()); // chip select
+        let cs = Output::new(peripherals.GPIO19, Level::High, OutputConfig::default()); // chip select
         let busy_in = Input::new(
-            peripherals.GPIO5,
+            peripherals.GPIO3,
             InputConfig::default().with_pull(Pull::Down),
         );
-        let dc = Output::new(peripherals.GPIO8, Level::Low, OutputConfig::default()); // data/command
-        let rst = Output::new(peripherals.GPIO1, Level::Low, OutputConfig::default());
+        let dc = Output::new(peripherals.GPIO18, Level::Low, OutputConfig::default()); // data/command
+        let rst = Output::new(peripherals.GPIO15, Level::Low, OutputConfig::default());
 
         let exclusive_spi = ExclusiveDevice::new(&mut spi, cs, &mut delay)
             .expect("Failed to get exclusive SPI device");
@@ -135,16 +128,14 @@ fn main() -> ! {
         }
     }
 
-    // Power off the neopixel and I2C bus, for low-power sleep.
-    // See https://learn.adafruit.com/adafruit-esp32-c6-feather/low-power-use
-    neopixel_and_i2c_power.set_low();
-
-    // Deep sleep.
-    let wakeup_interval = Duration::from_secs(30);
-    let awake_duration = Instant::now() - wakeup_time;
-    // (Convert to std Duration.)
-    let awake_duration = Duration::from_millis(awake_duration.as_millis());
-    let remaining_time = wakeup_interval - awake_duration;
-    let timer = TimerWakeupSource::new(remaining_time);
-    rtc.sleep_deep(&[&timer]);
+    //// Deep sleep.
+    //let wakeup_interval = Duration::from_secs(30);
+    //let awake_duration = Instant::now() - wakeup_time;
+    //// (Convert to std Duration.)
+    //let awake_duration = Duration::from_millis(awake_duration.as_millis());
+    //let remaining_time = wakeup_interval - awake_duration;
+    //let timer = TimerWakeupSource::new(remaining_time);
+    //rtc.sleep_deep(&[&timer]);
+    println!("here");
+    loop {}
 }
