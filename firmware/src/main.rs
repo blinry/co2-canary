@@ -50,7 +50,7 @@ fn main() -> ! {
         .with_sda(peripherals.GPIO6)
         .with_scl(peripherals.GPIO7);
 
-    if false {
+    if true {
         let co2_enable = Output::new(peripherals.GPIO4, Level::High, OutputConfig::default());
 
         let number_of_samples = 2;
@@ -90,17 +90,24 @@ fn main() -> ! {
         temperature = co2_sensor.get_temperature().unwrap();
 
         co2_sensor.turn_off();
-        i2c = co2_sensor.release();
+        let _i2c = co2_sensor.release();
     }
 
-    let battery_percent = max170xx::Max17048::new(i2c).soc().ok();
+    let battery_percent = None;
+
+    // Disabled for v0.1.0, where the MAX17048 chip is not connected correctly.
+    // let battery_percent = Some(
+    //     max170xx::Max17048::new(i2c)
+    //         .soc()
+    //         .expect("Should be able to read state of charge"),
+    // );
 
     // Refresh the display if the CO2 value has changed by more than a certain amount.
     let refresh_threshold = 50; // ppm
     let refresh_display =
         unsafe { HISTORY.recent().unwrap_or(0).abs_diff(LAST_DISPLAYED_CO2) >= refresh_threshold };
 
-    if true {
+    if refresh_display {
         let mut spi = Spi::new(peripherals.SPI2, SpiConfig::default())
             .expect("Should be able to configure SPI device")
             .with_sck(peripherals.GPIO20)
@@ -128,14 +135,12 @@ fn main() -> ! {
         }
     }
 
-    //// Deep sleep.
-    //let wakeup_interval = Duration::from_secs(30);
-    //let awake_duration = Instant::now() - wakeup_time;
-    //// (Convert to std Duration.)
-    //let awake_duration = Duration::from_millis(awake_duration.as_millis());
-    //let remaining_time = wakeup_interval - awake_duration;
-    //let timer = TimerWakeupSource::new(remaining_time);
-    //rtc.sleep_deep(&[&timer]);
-    println!("here");
-    loop {}
+    // Deep sleep.
+    let wakeup_interval = Duration::from_secs(30);
+    let awake_duration = Instant::now() - wakeup_time;
+    // (Convert to std Duration.)
+    let awake_duration = Duration::from_millis(awake_duration.as_millis());
+    let remaining_time = wakeup_interval - awake_duration;
+    let timer = TimerWakeupSource::new(remaining_time);
+    rtc.sleep_deep(&[&timer]);
 }

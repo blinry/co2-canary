@@ -56,7 +56,6 @@ where
         .unwrap();
 
         let mut display = Display1in54::default();
-        display.set_rotation(DisplayRotation::Rotate270);
         display.clear(Color::White).unwrap();
 
         Display {
@@ -188,10 +187,9 @@ where
     }
 
     fn draw_graph(&mut self, history: &History) {
-        // Swapped because the display is rotated.
         // Subtract 1 from width to make the last value more visible.
-        let width = self.epd.height() as i32 - 1;
-        let height = self.epd.width() as i32;
+        let width = self.epd.width() as i32 - 1;
+        let height = self.epd.height() as i32;
 
         // Find max value.
         let mut max_co2 = history.max_value().expect("No history to display");
