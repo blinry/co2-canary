@@ -1,8 +1,8 @@
+//! See "I2C on Senseair Sunrise & Sunlight" document at <https://senseair.com/product/sunrise/>
+
 use core::time::Duration;
 use embedded_hal::{delay::DelayNs, digital::OutputPin, i2c::I2c};
 use esp_println::println;
-
-/// See "I2C on Senseair Sunrise & Sunlight" document at https://senseair.com/product/sunrise/
 
 const SUNRISE_ADDR: u8 = 0x68;
 
@@ -15,7 +15,7 @@ pub struct CalibrationData {
 
 impl CalibrationData {
     pub const fn new() -> Self {
-        CalibrationData {
+        Self {
             abc_data: [0; 10],
             iir_data: [0; 14],
             last_timestamp_ms: None,
@@ -26,6 +26,10 @@ impl CalibrationData {
             let elapsed_ms = ms - last_ms;
             let duration = Duration::from_millis(elapsed_ms);
             let elapsed_hours = duration.as_secs() / 3600;
+            #[expect(
+                clippy::cast_possible_truncation,
+                reason = "truncation after 7.4 years"
+            )]
             self.increment_hour(elapsed_hours as u16);
         }
         self.last_timestamp_ms = Some(ms);
@@ -51,8 +55,8 @@ where
     ENABLE: OutputPin,
     DELAY: DelayNs,
 {
-    pub fn new(i2c: I2C, enable_pin: ENABLE, delay: DELAY) -> Self {
-        SunriseSensor {
+    pub const fn new(i2c: I2C, enable_pin: ENABLE, delay: DELAY) -> Self {
+        Self {
             enable_pin,
             i2c,
             delay,
@@ -155,7 +159,7 @@ where
 
     pub fn get_temperature(&mut self) -> Result<f32, I2C::Error> {
         let temperature = self.get_2_bytes(0x08)?;
-        Ok((temperature as f32) / 100.0)
+        Ok(f32::from(temperature) / 100.0)
     }
 
     pub fn turn_off(&mut self) {

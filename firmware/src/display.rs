@@ -23,6 +23,7 @@ use u8g2_fonts::{
 
 const CRITICAL_CO2: u16 = 1000;
 
+#[expect(clippy::struct_field_names)]
 pub struct Display<SPI, BUSY, DC, RST, DELAY> {
     epd: Epd1in54<SPI, BUSY, DC, RST, DELAY>,
     display: Display1in54,
@@ -58,7 +59,7 @@ where
         let mut display = Display1in54::default();
         display.clear(Color::White).unwrap();
 
-        Display {
+        Self {
             epd,
             display,
             spi,
@@ -96,39 +97,42 @@ where
 
     fn draw_co2(&mut self, co2: u16) {
         // TODO: Use the Results.
+
+        let co2_position = self.display.bounding_box().center() + Point::new(0, 5);
         let co2_font = FontRenderer::new::<fonts::u8g2_font_fub42_tr>();
+
         let mut co2_text = String::<32>::new();
         let _ = write!(&mut co2_text, "{co2}");
 
         let mut font_color = FontColor::Transparent(Color::Black);
 
         if co2 >= CRITICAL_CO2 {
+            const PADDING: u8 = 5;
+            const PADDING_POINT: Point = Point::new(PADDING as i32, PADDING as i32);
+            const PADDING_SIZE: Size = Size::new(2 * (PADDING as u32), 2 * (PADDING as u32));
+
             font_color = FontColor::Transparent(Color::White);
 
             // Draw black box under text.
             let rect = co2_font
                 .get_rendered_dimensions_aligned(
                     co2_text.as_str(),
-                    self.display.bounding_box().center() + Point::new(0, 5),
+                    co2_position,
                     VerticalPosition::Baseline,
                     HorizontalAlignment::Center,
                 )
                 .expect("Should be able to look up all glyphs")
                 .expect("Should result in a rectangle");
 
-            let padding = 5u32;
-            let _ = Rectangle::new(
-                rect.top_left - Point::new(padding as i32, padding as i32),
-                rect.size + Size::new(2 * padding, 2 * padding),
-            )
-            .into_styled(PrimitiveStyle::with_fill(Color::Black))
-            .draw(&mut self.display);
+            let _ = Rectangle::new(rect.top_left - PADDING_POINT, rect.size + PADDING_SIZE)
+                .into_styled(PrimitiveStyle::with_fill(Color::Black))
+                .draw(&mut self.display);
         }
 
         co2_font
             .render_aligned(
                 co2_text.as_str(),
-                self.display.bounding_box().center() + Point::new(0, 5),
+                co2_position,
                 VerticalPosition::Baseline,
                 HorizontalAlignment::Center,
                 font_color,
@@ -137,11 +141,9 @@ where
             .unwrap();
 
         let ppm_font = FontRenderer::new::<fonts::u8g2_font_fub25_tr>();
-        let mut ppm_text = String::<32>::new();
-        let _ = write!(&mut ppm_text, "ppm");
         ppm_font
             .render_aligned(
-                ppm_text.as_str(),
+                "ppm",
                 self.display.bounding_box().center() + Point::new(0, 35),
                 VerticalPosition::Baseline,
                 HorizontalAlignment::Center,
@@ -151,6 +153,7 @@ where
             .unwrap();
     }
 
+    #[expect(clippy::cast_possible_wrap)]
     fn draw_temperature(&mut self, temperature: f32) {
         let temperature_font = FontRenderer::new::<fonts::u8g2_font_fub14_tr>();
         let mut temperature_text = String::<32>::new();
@@ -167,6 +170,7 @@ where
             .unwrap();
     }
 
+    #[expect(clippy::cast_possible_wrap)]
     fn draw_battery(&mut self, percent: f32) {
         let battery_font = FontRenderer::new::<fonts::u8g2_font_fub14_tr>();
         let mut battery_text = String::<32>::new();
@@ -186,6 +190,11 @@ where
             .unwrap();
     }
 
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_possible_wrap,
+        clippy::cast_precision_loss
+    )]
     fn draw_graph(&mut self, history: &History) {
         // Subtract 1 from width to make the last value more visible.
         let width = self.epd.width() as i32 - 1;
@@ -200,8 +209,8 @@ where
         let pixels_per_value = width as f32 / (History::max_size() - 1) as f32;
 
         for ((i1, v1), (i2, v2)) in history.iter().enumerate().tuple_windows() {
-            let y1 = height - ((*v1 as i32) * height) / (max_co2 as i32);
-            let y2 = height - ((*v2 as i32) * height) / (max_co2 as i32);
+            let y1 = height - (i32::from(*v1) * height) / i32::from(max_co2);
+            let y2 = height - (i32::from(*v2) * height) / i32::from(max_co2);
 
             let x1 = (i1 as f32 * pixels_per_value) as i32;
             let x2 = (i2 as f32 * pixels_per_value) as i32;
@@ -212,7 +221,7 @@ where
         }
 
         // Draw dashed line at critical value.
-        let y = height - ((CRITICAL_CO2 as i32) * height) / (max_co2 as i32);
+        let y = height - (i32::from(CRITICAL_CO2) * height) / i32::from(max_co2);
         for x in (0..width).step_by(10) {
             let _ = Line::new(Point::new(x, y), Point::new(x + 5, y))
                 .into_styled(PrimitiveStyle::with_stroke(Color::Black, 1))

@@ -45,7 +45,7 @@ fn main() -> ! {
     let mut temperature = 0.0;
 
     let i2c_config = I2cConfig::default().with_frequency(Rate::from_khz(100));
-    let mut i2c = I2c::new(peripherals.I2C0, i2c_config)
+    let i2c = I2c::new(peripherals.I2C0, i2c_config)
         .expect("Should be able to configure I2C peripheral")
         .with_sda(peripherals.GPIO6)
         .with_scl(peripherals.GPIO7);
@@ -68,18 +68,18 @@ fn main() -> ! {
         // TODO: I can probably lower this?
         let milliseconds_per_sample = 300u64;
         let timer = TimerWakeupSource::new(Duration::from_millis(
-            (number_of_samples as u64) * milliseconds_per_sample,
+            u64::from(number_of_samples) * milliseconds_per_sample,
         ));
         rtc.sleep_light(&[&timer]);
 
         unsafe {
             match co2_sensor.get_co2(&mut CALIBRATION_DATA) {
                 Ok(co2) => {
-                    println!("CO2: {} ppm", co2);
+                    println!("CO2: {co2} ppm");
                     HISTORY.add_measurement(co2);
                 }
-                Err(e) => {
-                    println!("Error: {:?}", e);
+                Err(error) => {
+                    println!("Error: {error:?}");
                     HISTORY.add_measurement(0);
                 }
             }

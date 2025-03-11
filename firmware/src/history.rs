@@ -14,7 +14,7 @@ pub struct History {
 
 impl History {
     pub const fn new() -> Self {
-        History {
+        Self {
             values: HistoryBuffer::new(),
         }
     }
@@ -43,7 +43,7 @@ impl History {
         self.values.windows(2)
     }
 
-    pub fn max_size() -> usize {
+    pub const fn max_size() -> usize {
         HISTORY_SIZE
     }
 }
